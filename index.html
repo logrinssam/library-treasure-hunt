@@ -230,44 +230,35 @@
       <div class="finish-badge">미션 4/4 성공</div>
 
       <h1 id="finishTitle" class="finish-title">부기의 탐험책 완성!</h1>
-      <p class="finish-subtitle">네 개의 낱말을 모두 되찾았어요!</p>
+      <p class="finish-subtitle">네 개의 낱말을 모두 되찾았어요.</p>
 
-      <div class="finish-hero" aria-hidden="true">
-        <span class="finish-sparkle s1">✦</span>
-        <span class="finish-sparkle s2">★</span>
-        <span class="finish-sparkle s3">✧</span>
-        <span class="finish-sparkle s4">★</span>
-        <span class="finish-sparkle s5">✦</span>
-        <span class="finish-sparkle s6">✧</span>
-        <p class="finish-cheer">와! 모두 찾았어!</p>
-        <img
-          class="finish-character"
-          src="character_image/04_finish/06_duri_seoi_highfive.png"
-          alt="탐험 성공을 축하하는 두리와 서이"
-        />
+      <div class="finish-hero-wrap">
+        <div class="finish-hero">
+          <img
+            src="character_image/04_finish/finish-celebration.png"
+            alt="완성된 탐험책을 들고 함께 축하하는 부기, 두리, 서이"
+          />
+        </div>
       </div>
 
-      <h2 class="recovered-heading">되찾은 낱말</h2>
-      <ul id="recoveredWords" class="recovered-words" aria-label="되찾은 낱말">
-        <li class="word-yellow"><span>✓</span>들락날락</li>
-        <li class="word-pink"><span>✓</span>애지중지</li>
-        <li class="word-sky"><span>✓</span>디지털</li>
-        <li class="word-beige"><span>✓</span>조선풍속도</li>
-      </ul>
+      <section class="recovered-section" aria-label="되찾은 낱말">
+        <h2>되찾은 낱말</h2>
+        <div class="word-grid" id="recoveredWords">
+          <span class="word-chip word-yellow">✓ 들락날락</span>
+          <span class="word-chip word-pink">✓ 애지중지</span>
+          <span class="word-chip word-sky">✓ 디지털</span>
+          <span class="word-chip word-beige">✓ 조선풍속도</span>
+        </div>
+      </section>
 
-      <p id="finishMessage" class="finish-message">
-        네 개의 낱말이 모두 돌아와<br />
-        부기의 탐험책이 다시 반짝여요!
-      </p>
+      <div class="finish-thanks">
+        <strong>부기</strong>
+        <p>내 탐험책을 완성해 줘서 정말 고마워!</p>
+      </div>
 
       <button id="surveyButton" class="primary-button survey-button" type="button">
         설문조사하고 경품 교환하기
       </button>
-
-      <div class="finish-boogi-message">
-        <strong class="character-name">부기</strong>
-        <span>도서관 곳곳을 탐험해 낱말을 찾아줘서 고마워!</span>
-      </div>
 
       <footer class="finish-footer">
         <img
