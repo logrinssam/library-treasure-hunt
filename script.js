@@ -189,7 +189,12 @@ function showScreen(name) {
   });
   currentScreen = name;
   saveProgress();
-  window.scrollTo(0, 0);
+  // iOS에서 레이아웃 반영 후 스크롤 초기화
+  requestAnimationFrame(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  });
 }
 
 function saveProgress() {
