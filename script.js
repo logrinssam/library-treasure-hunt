@@ -269,10 +269,19 @@ function renderProgress() {
   renderWordTray(els.wordTray, currentIndex);
 }
 
+function shuffleOptions(options) {
+  const shuffled = [...options];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 function renderOptions(mission) {
   els.options.replaceChildren();
 
-  mission.options.forEach((optionText) => {
+  shuffleOptions(mission.options).forEach((optionText) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "option-button";
