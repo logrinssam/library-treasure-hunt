@@ -27,11 +27,11 @@
         id="musicToggle"
         class="music-toggle"
         type="button"
-        aria-label="배경음악 끄기"
-        aria-pressed="true"
+        aria-label="배경음악 켜기"
+        aria-pressed="false"
       >
-        <span class="music-toggle-icon" aria-hidden="true">♫</span>
-        <span class="music-toggle-text">음악 끄기</span>
+        <span class="music-toggle-icon" aria-hidden="true">♪</span>
+        <span class="music-toggle-text">음악 켜기</span>
       </button>
     </header>
 
@@ -87,6 +87,7 @@
       <button id="startButton" class="primary-button" type="button">
         낱말 찾으러 출발!
       </button>
+      <p class="start-music-hint">♪ 출발하면 음악이 함께 나요</p>
 
       <button id="startResetButton" class="text-button" type="button">
         처음부터 다시 시작
@@ -345,25 +346,8 @@
 
   </div>
 
-  <!-- 배경음악 (접속 시 자동재생 시도, 버튼으로 ON/OFF) -->
+  <!-- 배경음악 (터치/출발 버튼 제스처에서 재생 — QR·모바일 자동재생 정책 대응) -->
   <audio id="bgm" src="music.mp3" loop preload="auto"></audio>
-
-  <!-- QR/모바일: 자동재생이 막힐 때 첫 터치로 음악 시작 -->
-  <div id="audioUnlockGate" class="audio-unlock-gate" hidden>
-    <button
-      id="audioUnlockButton"
-      class="audio-unlock-card"
-      type="button"
-      aria-label="화면을 눌러 음악과 함께 시작하기"
-    >
-      <span class="audio-unlock-icon" aria-hidden="true">♫</span>
-      <strong class="audio-unlock-title">화면을 눌러 주세요!</strong>
-      <span class="audio-unlock-desc">
-        음악과 함께<br />부기의 탐험을 시작해요
-      </span>
-      <span class="audio-unlock-cta">여기를 터치</span>
-    </button>
-  </div>
 
   <!-- 정답·오답 팝업 -->
   <div id="feedbackModal" class="modal-backdrop" hidden>

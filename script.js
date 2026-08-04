@@ -747,37 +747,31 @@ function hideConfirm() {
   els.confirmModal.hidden = true;
 }
 
-/* ----- 배경음악: 접속 시 켜기 시도, QR/모바일은 터치 게이트로 시작 ----- */
+/* ----- 배경음악 -----
+ * 모바일/QR은 자동재생이 막히므로
+ * 「낱말 찾으러 출발!」을 누를 때 재생합니다.
+ */
 function initMusicToggle() {
   const audio = document.getElementById("bgm");
   const toggle = document.getElementById("musicToggle");
-  const gate = document.getElementById("audioUnlockGate");
-  const unlockBtn = document.getElementById("audioUnlockButton");
   if (!audio || !toggle) return;
 
   const textEl = toggle.querySelector(".music-toggle-text");
   const iconEl = toggle.querySelector(".music-toggle-icon");
+  const hintEl = document.querySelector(".start-music-hint");
+
+  function wantsMusicOn() {
+    return localStorage.getItem(GAME_CONFIG.musicStorageKey) !== "0";
+  }
 
   function updateMusicUi(isOn) {
     toggle.setAttribute("aria-pressed", String(isOn));
     toggle.setAttribute("aria-label", isOn ? "배경음악 끄기" : "배경음악 켜기");
     if (textEl) textEl.textContent = isOn ? "음악 끄기" : "음악 켜기";
     if (iconEl) iconEl.textContent = isOn ? "♫" : "♪";
-  }
-
-  function wantsMusicOn() {
-    // 사용자가 명시적으로 끈 경우만 OFF, 그 외(첫 방문 포함)는 ON
-    return localStorage.getItem(GAME_CONFIG.musicStorageKey) !== "0";
-  }
-
-  function showUnlockGate() {
-    if (!gate) return;
-    gate.hidden = false;
-  }
-
-  function hideUnlockGate() {
-    if (!gate) return;
-    gate.hidden = true;
+    if (hintEl) {
+      hintEl.hidden = isOn || !wantsMusicOn();
+    }
   }
 
   async function setMusicOn(isOn, { fromToggle = false } = {}) {
@@ -785,18 +779,15 @@ function initMusicToggle() {
       try {
         audio.loop = true;
         audio.volume = 1;
+        // play()는 클릭 핸들러 스택에서 바로 호출되어야 iOS가 허용함
         await audio.play();
         localStorage.setItem(GAME_CONFIG.musicStorageKey, "1");
         updateMusicUi(true);
-        hideUnlockGate();
         return true;
       } catch (err) {
-        // 브라우저 자동재생 정책으로 막힘 (QR·모바일에서 흔함)
         updateMusicUi(false);
         if (fromToggle) {
-          // 상단 토글로 켜려다 실패한 경우만 OFF로 저장
           localStorage.setItem(GAME_CONFIG.musicStorageKey, "0");
-          hideUnlockGate();
         }
         return false;
       }
@@ -805,18 +796,31 @@ function initMusicToggle() {
     audio.pause();
     localStorage.setItem(GAME_CONFIG.musicStorageKey, "0");
     updateMusicUi(false);
-    hideUnlockGate();
     return true;
   }
 
-  async function unlockWithGesture() {
-    // 터치/클릭 제스처 안에서 play() 해야 iOS·Android에서 허용됨
-    const started = await setMusicOn(true);
-    if (!started) {
-      // 재생 실패해도 탐험은 진행할 수 있게 게이트만 닫음
-      hideUnlockGate();
+  /** 출발 버튼 등 사용자 제스처에서 음악 시작 */
+  function startMusicFromUserGesture() {
+    if (!wantsMusicOn()) return;
+    if (!audio.paused) return;
+    // await 없이 바로 play 호출 (제스처 컨텍스트 유지)
+    audio.loop = true;
+    audio.volume = 1;
+    const playPromise = audio.play();
+    if (playPromise && typeof playPromise.then === "function") {
+      playPromise
+        .then(() => {
+          localStorage.setItem(GAME_CONFIG.musicStorageKey, "1");
+          updateMusicUi(true);
+        })
+        .catch(() => {
+          updateMusicUi(false);
+        });
     }
   }
+
+  // 외부(bindEvents의 출발 버튼)에서 호출할 수 있게 노출
+  window.__startBgmFromGesture = startMusicFromUserGesture;
 
   toggle.addEventListener("click", (event) => {
     event.stopPropagation();
@@ -824,46 +828,15 @@ function initMusicToggle() {
     setMusicOn(!currentlyOn, { fromToggle: true });
   });
 
-  if (unlockBtn) {
-    unlockBtn.addEventListener("click", (event) => {
-      event.stopPropagation();
-      unlockWithGesture();
-    });
-  }
+  // 이어서 진행 중이면, 주요 진행 버튼을 누를 때도 시작
+  ["routeButton", "transitionButton"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("click", startMusicFromUserGesture);
+  });
 
-  // 게이트 배경을 눌러도 시작
-  if (gate) {
-    gate.addEventListener("click", (event) => {
-      if (event.target === gate) unlockWithGesture();
-    });
-  }
-
-  // 「낱말 찾으러 출발」 등 첫 주요 버튼에서도 음악 시도 (백업)
-  const startButton = document.getElementById("startButton");
-  if (startButton) {
-    startButton.addEventListener(
-      "click",
-      () => {
-        if (wantsMusicOn() && audio.paused) {
-          setMusicOn(true);
-        }
-      },
-      true
-    );
-  }
-
-  if (wantsMusicOn()) {
-    updateMusicUi(true);
-    setMusicOn(true).then((started) => {
-      if (!started) {
-        // QR로 들어오면 여기로 옴 → 터치 안내 표시
-        showUnlockGate();
-      }
-    });
-  } else {
-    updateMusicUi(false);
-    hideUnlockGate();
-  }
+  // 기본은 대기(꺼짐 UI). 출발 버튼을 눌러야 재생.
+  updateMusicUi(false);
 }
 
 function resumeFromStorage() {
@@ -892,6 +865,10 @@ function bindEvents() {
   }
 
   document.getElementById("startButton").addEventListener("click", () => {
+    // QR/모바일: 출발 제스처에서 배경음악 시작
+    if (typeof window.__startBgmFromGesture === "function") {
+      window.__startBgmFromGesture();
+    }
     showScreen("route");
   });
 

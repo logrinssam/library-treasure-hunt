@@ -1196,95 +1196,13 @@ button {
   font-size: 13px;
   opacity: 0.65;
 }
-/* ----- QR/모바일 음악 시작 게이트 ----- */
-.audio-unlock-gate {
-  position: fixed;
-  inset: 0;
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding:
-    calc(20px + var(--safe-top))
-    calc(20px + var(--safe-right))
-    calc(20px + var(--safe-bottom))
-    calc(20px + var(--safe-left));
-  background:
-    radial-gradient(ellipse 80% 50% at 50% 20%, rgba(200, 232, 214, 0.95) 0%, transparent 55%),
-    rgba(15, 55, 42, 0.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  animation: fadeIn 0.25s ease;
-}
 
-.audio-unlock-gate[hidden] {
-  display: none !important;
-}
-
-.audio-unlock-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  width: min(100%, 320px);
-  padding: 28px 22px 24px;
-  border: none;
-  border-radius: 28px;
-  background: #fffdf8;
-  box-shadow: 0 18px 50px rgba(15, 55, 42, 0.28);
-  color: var(--ink);
-  text-align: center;
-  touch-action: manipulation;
-  animation: unlockPulse 1.8s ease-in-out infinite;
-}
-
-.audio-unlock-icon {
-  display: grid;
-  place-items: center;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: linear-gradient(180deg, #eaf7ef, #fff6d6);
-  color: var(--green-deep);
-  font-size: 28px;
-}
-
-.audio-unlock-title {
-  font-family: var(--font-display);
-  font-size: 24px;
-  font-weight: 400;
-  color: var(--green-deep);
-}
-
-.audio-unlock-desc {
+.start-music-hint {
+  margin: 8px 0 0;
   color: var(--muted);
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 700;
-  line-height: 1.45;
-  word-break: keep-all;
-}
-
-.audio-unlock-cta {
-  margin-top: 8px;
-  min-width: 70%;
-  padding: 14px 18px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #1f8a64 0%, var(--green) 100%);
-  color: #fff;
-  font-family: var(--font-display);
-  font-size: 18px;
-  box-shadow: 0 4px 0 var(--green-deep);
-}
-
-@keyframes unlockPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .audio-unlock-card {
-    animation: none;
-  }
+  opacity: 0.75;
 }
 
 .modal-backdrop {
