@@ -329,14 +329,13 @@ button {
   margin: 8px 0 4px;
 }
 
-/* 왼쪽: 빨간색 두리 / 오른쪽: 초록색 서이 — 같은 높이로 맞춤 */
+/* 왼쪽: 두리 / 오른쪽: 서이 — 동일 정사각 에셋·동일 크기 */
 .duri-character,
 .seoi-character {
   position: absolute;
-  bottom: 8px;
-  width: auto;
-  height: clamp(118px, 30vw, 142px);
-  max-width: min(36vw, 150px);
+  bottom: 6px;
+  width: clamp(112px, 29vw, 136px);
+  height: clamp(112px, 29vw, 136px);
   object-fit: contain;
   object-position: bottom center;
   z-index: 2;
@@ -1331,8 +1330,8 @@ button {
 
   .duri-character,
   .seoi-character {
-    height: clamp(100px, 26vw, 120px);
-    max-width: min(32vw, 128px);
+    width: clamp(96px, 26vw, 118px);
+    height: clamp(96px, 26vw, 118px);
   }
 
   .speech-list {
@@ -1453,8 +1452,8 @@ button {
 
   .duri-character,
   .seoi-character {
-    height: 92px;
-    max-width: min(24vw, 100px);
+    width: 88px;
+    height: 88px;
   }
 
   .mission-image {
