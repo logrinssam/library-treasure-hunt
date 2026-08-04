@@ -172,6 +172,7 @@ const els = {
   answerSlots: document.getElementById("answerSlots"),
   tileBoard: document.getElementById("tileBoard"),
   checkAnswerButton: document.getElementById("checkAnswerButton"),
+  clearTileButton: document.getElementById("clearTileButton"),
   placeHint: document.getElementById("placeHint"),
   hintButton: document.getElementById("hintButton"),
   guideBubble: document.getElementById("guideBubble"),
@@ -334,8 +335,25 @@ function getSelectedWord() {
 }
 
 function updateCheckButton() {
-  const allFilled = slotTileIds.length > 0 && slotTileIds.every((id) => id !== null);
+  const filledCount = slotTileIds.filter((id) => id !== null).length;
+  const allFilled = slotTileIds.length > 0 && filledCount === slotTileIds.length;
   els.checkAnswerButton.disabled = !allFilled;
+  if (els.clearTileButton) {
+    els.clearTileButton.disabled = filledCount === 0;
+  }
+}
+
+/** 마지막으로 채운 글자 한 칸만 지우기 */
+function clearLastTile() {
+  let lastFilled = -1;
+  for (let i = slotTileIds.length - 1; i >= 0; i--) {
+    if (slotTileIds[i] !== null) {
+      lastFilled = i;
+      break;
+    }
+  }
+  if (lastFilled === -1) return;
+  clearFromSlot(lastFilled);
 }
 
 function renderAnswerSlots(mission) {
@@ -585,6 +603,7 @@ function setTilesDisabled(disabled) {
     }
   });
   els.checkAnswerButton.disabled = true;
+  if (els.clearTileButton) els.clearTileButton.disabled = true;
   els.answerSlots.querySelectorAll(".answer-slot").forEach((btn) => {
     btn.disabled = disabled;
   });
@@ -847,6 +866,9 @@ function bindEvents() {
 
   els.hintButton.addEventListener("click", onHintButtonClick);
   els.checkAnswerButton.addEventListener("click", checkAnswer);
+  if (els.clearTileButton) {
+    els.clearTileButton.addEventListener("click", clearLastTile);
+  }
   document.getElementById("surveyButton").addEventListener("click", openSurvey);
 
   document.getElementById("startResetButton").addEventListener("click", showConfirm);

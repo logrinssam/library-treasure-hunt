@@ -217,14 +217,25 @@
         <!-- 10개 글자 조각 (문제마다 섞어서 표시) -->
         <div id="tileBoard" class="tile-board" role="group" aria-label="글자 조각"></div>
 
-        <button
-          id="checkAnswerButton"
-          class="primary-button check-answer-button"
-          type="button"
-          disabled
-        >
-          낱말 확인하기
-        </button>
+        <div class="answer-actions">
+          <button
+            id="clearTileButton"
+            class="secondary-button clear-tile-button"
+            type="button"
+            disabled
+            aria-label="마지막에 고른 글자 지우기"
+          >
+            한 글자 지우기
+          </button>
+          <button
+            id="checkAnswerButton"
+            class="primary-button check-answer-button"
+            type="button"
+            disabled
+          >
+            낱말 확인하기
+          </button>
+        </div>
       </article>
 
       <button id="questionResetButton" class="text-button reset-button" type="button">
