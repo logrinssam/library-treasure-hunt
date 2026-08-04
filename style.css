@@ -172,34 +172,41 @@ button {
   text-align: center;
 }
 
+/* 로고 3개 한 줄 — 시각 무게 맞춰 배치 */
 .footer-logos {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 12px 16px;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
 }
 
 .footer-logo {
   display: block;
-  height: 34px;
   width: auto;
-  max-width: 30%;
   object-fit: contain;
   object-position: center;
-  opacity: 1;
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .footer-logo-busan {
-  height: 30px;
+  height: 26px;
+  max-height: 26px;
 }
 
 .footer-logo-future {
-  height: 36px;
+  height: 40px;
+  max-height: 40px;
 }
 
 .footer-logo-gamification {
-  height: 40px;
+  height: 52px;
+  max-height: 52px;
+  flex: 0 0 auto;
+  width: 52px;
 }
 
 .screen {
@@ -1293,20 +1300,25 @@ button {
     min-height: 34px;
   }
 
+  .footer-logos {
+    gap: 8px;
+    max-width: 100%;
+  }
+
   .footer-logo-busan {
-    height: 26px;
+    height: 22px;
+    max-height: 22px;
   }
 
   .footer-logo-future {
-    height: 30px;
+    height: 34px;
+    max-height: 34px;
   }
 
   .footer-logo-gamification {
-    height: 34px;
-  }
-
-  .footer-logo {
-    max-width: 28%;
+    height: 46px;
+    max-height: 46px;
+    width: 46px;
   }
 
   .start-title {
