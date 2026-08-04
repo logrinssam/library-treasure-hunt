@@ -727,7 +727,7 @@ function hideConfirm() {
   els.confirmModal.hidden = true;
 }
 
-/* ----- 배경음악 ON/OFF (기본 OFF, localStorage로 유지) ----- */
+/* ----- 배경음악: 접속 시 켜기 시도, 버튼으로 끄기/켜기 ----- */
 function initMusicToggle() {
   const audio = document.getElementById("bgm");
   const toggle = document.getElementById("musicToggle");
@@ -735,6 +735,7 @@ function initMusicToggle() {
 
   const textEl = toggle.querySelector(".music-toggle-text");
   const iconEl = toggle.querySelector(".music-toggle-icon");
+  let unlockBound = false;
 
   function updateMusicUi(isOn) {
     toggle.setAttribute("aria-pressed", String(isOn));
@@ -743,34 +744,63 @@ function initMusicToggle() {
     if (iconEl) iconEl.textContent = isOn ? "♫" : "♪";
   }
 
-  async function setMusicOn(isOn) {
+  function wantsMusicOn() {
+    // 사용자가 명시적으로 끈 경우만 OFF, 그 외(첫 방문 포함)는 ON
+    return localStorage.getItem(GAME_CONFIG.musicStorageKey) !== "0";
+  }
+
+  async function setMusicOn(isOn, { fromUser = false } = {}) {
     if (isOn) {
       try {
         audio.loop = true;
+        audio.volume = 1;
         await audio.play();
         localStorage.setItem(GAME_CONFIG.musicStorageKey, "1");
         updateMusicUi(true);
+        return true;
       } catch (err) {
-        // 자동재생 차단 시: 선호는 유지하고 UI만 OFF (다음 탭에서 재생)
+        // 브라우저 자동재생 정책으로 막힌 경우
+        if (fromUser) {
+          localStorage.setItem(GAME_CONFIG.musicStorageKey, "0");
+        }
         updateMusicUi(false);
+        return false;
       }
-    } else {
-      audio.pause();
-      localStorage.setItem(GAME_CONFIG.musicStorageKey, "0");
-      updateMusicUi(false);
     }
+
+    audio.pause();
+    localStorage.setItem(GAME_CONFIG.musicStorageKey, "0");
+    updateMusicUi(false);
+    return true;
   }
 
-  toggle.addEventListener("click", () => {
-    const currentlyOn = toggle.getAttribute("aria-pressed") === "true";
-    setMusicOn(!currentlyOn);
+  // 자동재생이 막히면, 첫 화면 탭/클릭 때 한 번 더 재생 시도
+  function bindAutoplayUnlock() {
+    if (unlockBound) return;
+    unlockBound = true;
+
+    const tryUnlock = () => {
+      if (!wantsMusicOn() || !audio.paused) return;
+      setMusicOn(true);
+    };
+
+    document.addEventListener("pointerdown", tryUnlock, { once: true, passive: true });
+    document.addEventListener("keydown", tryUnlock, { once: true });
+  }
+
+  toggle.addEventListener("click", (event) => {
+    event.stopPropagation();
+    const currentlyOn = toggle.getAttribute("aria-pressed") === "true" && !audio.paused;
+    setMusicOn(!currentlyOn, { fromUser: true });
   });
 
-  // 기본 OFF. 이전에 ON이었으면 재생 시도(차단되면 UI는 OFF, 선호는 유지)
-  const savedOn = localStorage.getItem(GAME_CONFIG.musicStorageKey) === "1";
-  updateMusicUi(false);
-  if (savedOn) {
-    setMusicOn(true);
+  if (wantsMusicOn()) {
+    updateMusicUi(true);
+    setMusicOn(true).then((started) => {
+      if (!started) bindAutoplayUnlock();
+    });
+  } else {
+    updateMusicUi(false);
   }
 }
 

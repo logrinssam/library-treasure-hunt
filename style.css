@@ -1012,10 +1012,10 @@ button {
 .finish-hero-wrap {
   width: 100%;
   max-width: 390px;
-  padding: 7px;
+  padding: 0;
   margin: 12px auto 14px;
-  border-radius: 25px;
-  background: linear-gradient(135deg, #e8f6ed, #fff2cf);
+  border-radius: 22px;
+  background: transparent;
 }
 
 .finish-hero {
@@ -1023,7 +1023,7 @@ button {
   border-radius: 22px;
   overflow: hidden;
   background: #fffdf8;
-  box-shadow: 0 12px 25px rgba(22, 55, 42, 0.12);
+  box-shadow: 0 8px 22px rgba(22, 55, 42, 0.08);
 }
 
 .finish-hero img {

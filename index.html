@@ -27,11 +27,11 @@
         id="musicToggle"
         class="music-toggle"
         type="button"
-        aria-label="배경음악 켜기"
-        aria-pressed="false"
+        aria-label="배경음악 끄기"
+        aria-pressed="true"
       >
-        <span class="music-toggle-icon" aria-hidden="true">♪</span>
-        <span class="music-toggle-text">음악 켜기</span>
+        <span class="music-toggle-icon" aria-hidden="true">♫</span>
+        <span class="music-toggle-text">음악 끄기</span>
       </button>
     </header>
 
@@ -324,8 +324,8 @@
 
   </div>
 
-  <!-- 배경음악 (기본 OFF, 사용자 토글로 재생) -->
-  <audio id="bgm" src="music.mp3" loop preload="metadata"></audio>
+  <!-- 배경음악 (접속 시 자동재생 시도, 버튼으로 ON/OFF) -->
+  <audio id="bgm" src="music.mp3" loop preload="auto"></audio>
 
   <!-- 정답·오답 팝업 -->
   <div id="feedbackModal" class="modal-backdrop" hidden>
