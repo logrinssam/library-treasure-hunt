@@ -20,6 +20,23 @@
 <body>
   <div class="app-shell" id="app">
 
+    <!-- 공통 상단: 행사명 + 음악 토글 -->
+    <header class="app-topbar">
+      <p class="event-badge">제4회 창의융합 보드게임 대축제</p>
+      <button
+        id="musicToggle"
+        class="music-toggle"
+        type="button"
+        aria-label="배경음악 켜기"
+        aria-pressed="false"
+      >
+        <span class="music-toggle-icon" aria-hidden="true">♪</span>
+        <span class="music-toggle-text">음악 켜기</span>
+      </button>
+    </header>
+
+    <div class="app-main">
+
     <!-- 1. 시작 화면 -->
     <section id="startScreen" class="screen start-screen active" aria-labelledby="startTitle">
       <div class="brand-chip" id="startSubtitle">부산도서관 탐험책 완성 대작전</div>
@@ -123,7 +140,7 @@
             <li>
               <span class="route-no route-no-3f">4</span>
               <span class="route-place">
-                <strong>부산학당 안 큰 화면</strong>
+                <strong>실감서재 안 큰 화면</strong>
                 <em>마지막 낱말</em>
               </span>
             </li>
@@ -165,8 +182,8 @@
             alt="문제를 안내하는 서이"
           />
           <div id="guideBubble" class="guide-bubble">
-            현장에서 단서를 찾아<br />
-            알맞은 답을 골라 보세요!
+            현장에서 낱말을 찾아<br />
+            글자 조각을 순서대로 눌러 보세요!
           </div>
         </div>
 
@@ -178,11 +195,15 @@
         <p id="displayQuestion" class="display-question"></p>
         <p id="missionQuestion" class="mission-clue"></p>
 
-        <div id="answerSlots" class="answer-slots" aria-label="정답 칸"></div>
-
         <figure id="missionImageWrap" class="mission-image-wrap">
           <img id="missionImage" class="mission-image" src="" alt="장소 단서 사진" />
         </figure>
+
+        <!-- 정답 칸: 초성은 칸 위, 글자는 칸 안 -->
+        <div id="answerSlots" class="answer-slots" aria-label="정답 칸"></div>
+
+        <!-- 텍스트 힌트 영역 (초성 공개 후 / 2회 오답 후) -->
+        <div id="placeHint" class="place-hint" hidden></div>
 
         <button
           id="hintButton"
@@ -190,10 +211,20 @@
           type="button"
           aria-expanded="false"
         >
-          초성 힌트 보기
+          힌트 보기
         </button>
 
-        <div id="options" class="option-list" role="group" aria-label="정답 선택"></div>
+        <!-- 10개 글자 조각 (문제마다 섞어서 표시) -->
+        <div id="tileBoard" class="tile-board" role="group" aria-label="글자 조각"></div>
+
+        <button
+          id="checkAnswerButton"
+          class="primary-button check-answer-button"
+          type="button"
+          disabled
+        >
+          낱말 확인하기
+        </button>
       </article>
 
       <button id="questionResetButton" class="text-button reset-button" type="button">
@@ -267,19 +298,34 @@
       </button>
 
       <footer class="finish-footer">
-        <img
-          class="research-logo"
-          src="character_image/05_branding/08_research_group_logo.png"
-          alt="부산게이미피케이션교육연구회"
-        />
-        <p class="finish-credit">제작: 부산게이미피케이션교육연구회</p>
         <button id="finishResetButton" class="text-button" type="button">
           새로운 참가자 시작
         </button>
       </footer>
     </section>
 
+    </div><!-- /.app-main -->
+
+    <!-- 공통 하단: 주최 로고 -->
+    <footer class="app-footer">
+      <div class="footer-logos">
+        <img
+          class="footer-logo footer-logo-busan"
+          src="images/logo-busan-library.png"
+          alt="부산도서관"
+        />
+        <img
+          class="footer-logo footer-logo-future"
+          src="images/logo-future-edu.png"
+          alt="전국미래교육연구협회"
+        />
+      </div>
+    </footer>
+
   </div>
+
+  <!-- 배경음악 (기본 OFF, 사용자 토글로 재생) -->
+  <audio id="bgm" src="music.mp3" loop preload="metadata"></audio>
 
   <!-- 정답·오답 팝업 -->
   <div id="feedbackModal" class="modal-backdrop" hidden>

@@ -1,6 +1,9 @@
 /**
  * 부기의 사라진 낱말을 찾아라!
  * — 부산도서관 탐험책 완성 대작전
+ *
+ * 정답 입력: 10개 글자 조각을 순서대로 눌러 빈칸을 채운 뒤
+ * 「낱말 확인하기」로 제출합니다.
  */
 
 const CHARACTER_IMAGES = {
@@ -19,6 +22,7 @@ const GAME_CONFIG = {
   subtitle: "부산도서관 탐험책 완성 대작전",
   totalMissions: 4,
   surveyUrl: "",
+  musicStorageKey: "boogiMusicOn",
 
   opening: {
     title: "부기의 사라진 낱말을 찾아라!",
@@ -48,12 +52,13 @@ const MISSIONS = [
     location: "어린이실 입구",
     storyTitle: "드나드는 아이들의 낱말",
     locationGuide: "1층에서 사진 속 어린이실 간판을 찾아보세요.",
-    question: "간판 아래에 쓰인 말은 무엇일까요?",
+    question: "입구의 알록달록한 글자를 찾아 순서대로 눌러 주세요.",
     displayQuestion: "【　】",
-    options: ["들락날락", "오락가락", "알락달락"],
     answer: "들락날락",
     answerSyllables: ["들", "락", "날", "락"],
     hintInitials: ["ㄷ", "ㄹ", "ㄴ", "ㄹ"],
+    tiles: ["들", "락", "날", "락", "꿈", "책", "놀", "길", "문", "별"],
+    hint: "어린이실 입구 유리창의 초록색과 주황색 글자를 왼쪽부터 읽어보세요.",
     recoveredWord: "들락날락",
     correctTitle: "첫 번째 낱말을 찾았어요!",
     correctMessage: "‘들락날락’이 탐험책으로 돌아왔어요.",
@@ -66,12 +71,14 @@ const MISSIONS = [
     location: "어린이실 안 부기존",
     storyTitle: "부기의 소중한 마음",
     locationGuide: "어린이실 안에서 부기존을 찾아보세요.",
-    question: "부기존 벽의 문장을 완성해 보세요.",
+    question: "부기 그림 위에 쓰인 문장을 보고 ‘당신처럼’ 뒤의 낱말을 완성해 주세요.",
     displayQuestion: "당신처럼 【　】",
-    options: ["애지중지", "알콩달콩", "반짝반짝"],
     answer: "애지중지",
     answerSyllables: ["애", "지", "중", "지"],
     hintInitials: ["ㅇ", "ㅈ", "ㅈ", "ㅈ"],
+    tiles: ["애", "지", "중", "지", "사", "랑", "꿈", "별", "책", "꼭"],
+    hint: "부기 그림 위쪽의 분홍색 네 글자를 살펴보세요.",
+    extraHint: "첫 글자는 ‘애’예요.",
     recoveredWord: "애지중지",
     correctTitle: "부기의 소중한 낱말을 찾았어요!",
     correctMessage: "‘애지중지’가 탐험책으로 돌아왔어요.",
@@ -84,12 +91,13 @@ const MISSIONS = [
     location: "본관 1층 AI 배움터",
     storyTitle: "미래를 여는 낱말",
     locationGuide: "본관 1층에서 사진 속 AI 체험 공간을 찾아보세요.",
-    question: "안내판에서 ‘AI’ 다음에 쓰인 낱말은 무엇일까요?",
+    question: "안내판에서 ‘AI’ 다음에 쓰인 세 글자를 순서대로 눌러 주세요.",
     displayQuestion: "AI 【　】 배움터",
-    options: ["디지털", "과학", "독서"],
     answer: "디지털",
     answerSyllables: ["디", "지", "털"],
     hintInitials: ["ㄷ", "ㅈ", "ㅌ"],
+    tiles: ["디", "지", "털", "로", "봇", "체", "험", "책", "꿈", "별"],
+    hint: "안내판 가장 위쪽에서 ‘AI’ 바로 다음에 쓰인 말을 읽어보세요.",
     recoveredWord: "디지털",
     correctTitle: "1층의 낱말을 모두 찾았어요!",
     correctMessage: "‘디지털’이 탐험책으로 돌아왔어요.",
@@ -100,15 +108,16 @@ const MISSIONS = [
     id: "mission-4",
     order: 4,
     floor: "3층",
-    location: "부산학당 안",
+    location: "실감서재 안",
     storyTitle: "옛이야기가 담긴 마지막 낱말",
-    locationGuide: "3층 부산학당 안에서 사진 속 큰 화면을 찾아보세요.",
-    question: "화면 가운데 쓰인 그림의 이름은 무엇일까요?",
+    locationGuide: "3층 실감서재 안에서 사진 속 큰 화면을 찾아보세요.",
+    question: "큰 화면 가운데 쓰인 그림의 이름을 순서대로 완성해 주세요.",
     displayQuestion: "화면 속 그림의 이름",
-    options: ["조선풍속도", "대동여지도", "세계지도"],
     answer: "조선풍속도",
     answerSyllables: ["조", "선", "풍", "속", "도"],
     hintInitials: ["ㅈ", "ㅅ", "ㅍ", "ㅅ", "ㄷ"],
+    tiles: ["조", "선", "풍", "속", "도", "옛", "날", "생", "활", "지"],
+    hint: "화면 중앙에 가장 크게 쓰인 흰색 다섯 글자를 읽어보세요.",
     recoveredWord: "조선풍속도",
     correctTitle: "마지막 낱말까지 찾았어요!",
     correctMessage: "‘조선풍속도’가 탐험책으로 돌아왔어요.",
@@ -130,8 +139,8 @@ const FEEDBACK_MESSAGES = {
   wrong: {
     title: "다시 살펴볼까요?",
     message:
-      "앗, 조금 다른 것 같아요.\n현장에 쓰인 글자와 같은 답을 다시 골라보세요.",
-    buttonText: "다시 선택하기",
+      "글자 순서가 조금 다른 것 같아요. 현장에 쓰인 낱말을 다시 살펴볼까요?",
+    buttonText: "다시 골라 보기",
   },
 };
 
@@ -160,8 +169,10 @@ const els = {
   missionQuestion: document.getElementById("missionQuestion"),
   missionImageWrap: document.getElementById("missionImageWrap"),
   missionImage: document.getElementById("missionImage"),
-  options: document.getElementById("options"),
   answerSlots: document.getElementById("answerSlots"),
+  tileBoard: document.getElementById("tileBoard"),
+  checkAnswerButton: document.getElementById("checkAnswerButton"),
+  placeHint: document.getElementById("placeHint"),
   hintButton: document.getElementById("hintButton"),
   guideBubble: document.getElementById("guideBubble"),
   transitionTitle: document.getElementById("transitionTitle"),
@@ -180,14 +191,27 @@ const els = {
 
 /** @type {number} */
 let currentIndex = 0;
-/** @type {number} */
+/** @type {number} 오답 횟수 (실패 횟수는 UI에 표시하지 않음) */
 let wrongCount = 0;
-/** @type {boolean} */
-let hintVisible = false;
+/** @type {boolean} 초성이 한 번이라도 공개되었는지 */
+let initialsRevealed = false;
+/** @type {boolean} 텍스트 힌트 패널 표시 여부 */
+let hintPanelOpen = false;
 /** @type {"start"|"route"|"question"|"transition"|"finish"} */
 let currentScreen = "start";
 /** @type {null | (() => void)} */
 let feedbackAction = null;
+
+/**
+ * 섞인 타일 목록. 동일 글자도 별도 인스턴스(id)로 관리.
+ * @type {{ id: number, letter: string }[]}
+ */
+let boardTiles = [];
+/**
+ * 슬롯에 채워진 타일 id (비어 있으면 null)
+ * @type {(number|null)[]}
+ */
+let slotTileIds = [];
 
 function showScreen(name) {
   Object.entries(screens).forEach(([key, el]) => {
@@ -231,6 +255,10 @@ function resetGame() {
   localStorage.removeItem(STORAGE.screen);
   currentIndex = 0;
   wrongCount = 0;
+  initialsRevealed = false;
+  hintPanelOpen = false;
+  boardTiles = [];
+  slotTileIds = [];
   hideFeedback();
   hideConfirm();
   showScreen("start");
@@ -275,8 +303,9 @@ function renderProgress() {
   renderWordTray(els.wordTray, currentIndex);
 }
 
-function shuffleOptions(options) {
-  const shuffled = [...options];
+/** Fisher–Yates 섞기 (데이터 순서 그대로 보여 주지 않음) */
+function shuffleTiles(tiles) {
+  const shuffled = [...tiles];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
@@ -284,9 +313,34 @@ function shuffleOptions(options) {
   return shuffled;
 }
 
+/** 미션 tiles 배열을 id가 붙은 타일 객체로 만들고 섞기 */
+function createBoardTiles(mission) {
+  const withIds = mission.tiles.map((letter, id) => ({ id, letter }));
+  return shuffleTiles(withIds);
+}
+
+function getUsedTileIds() {
+  return new Set(slotTileIds.filter((id) => id !== null));
+}
+
+function getSelectedWord() {
+  return slotTileIds
+    .map((id) => {
+      if (id === null) return "";
+      const tile = boardTiles.find((t) => t.id === id);
+      return tile ? tile.letter : "";
+    })
+    .join("");
+}
+
+function updateCheckButton() {
+  const allFilled = slotTileIds.length > 0 && slotTileIds.every((id) => id !== null);
+  els.checkAnswerButton.disabled = !allFilled;
+}
+
 function renderAnswerSlots(mission) {
   els.answerSlots.replaceChildren();
-  els.answerSlots.classList.toggle("hint-open", hintVisible);
+  els.answerSlots.classList.toggle("hint-open", initialsRevealed);
 
   mission.answerSyllables.forEach((_, index) => {
     const wrapper = document.createElement("div");
@@ -295,55 +349,189 @@ function renderAnswerSlots(mission) {
     const initial = document.createElement("span");
     initial.className = "initial-hint";
     initial.textContent = mission.hintInitials[index];
-    initial.setAttribute("aria-hidden", hintVisible ? "false" : "true");
+    initial.setAttribute("aria-hidden", initialsRevealed ? "false" : "true");
 
-    const slot = document.createElement("div");
+    const slot = document.createElement("button");
+    slot.type = "button";
     slot.className = "answer-slot";
-    slot.setAttribute("aria-hidden", "true");
+    slot.dataset.slotIndex = String(index);
+    slot.setAttribute("aria-label", `${index + 1}번째 글자 칸`);
+
+    const tileId = slotTileIds[index];
+    if (tileId !== null && tileId !== undefined) {
+      const tile = boardTiles.find((t) => t.id === tileId);
+      slot.textContent = tile ? tile.letter : "";
+      slot.classList.add("filled");
+    }
+
+    // 채워진 칸을 누르면 그 칸부터 뒤까지 비우고 타일 반환
+    slot.addEventListener("click", () => clearFromSlot(index));
 
     wrapper.append(initial, slot);
     els.answerSlots.append(wrapper);
   });
 }
 
-function renderOptions(mission) {
-  els.options.replaceChildren();
+function renderTileBoard() {
+  if (!els.tileBoard) return;
 
-  shuffleOptions(mission.options).forEach((optionText) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "option-button";
-    button.textContent = optionText;
-    button.addEventListener("click", () => checkAnswer(optionText));
-    els.options.append(button);
+  els.tileBoard.replaceChildren();
+  const used = getUsedTileIds();
+
+  boardTiles.forEach((tile) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "tile-button";
+    btn.textContent = tile.letter;
+    btn.dataset.tileId = String(tile.id);
+
+    if (used.has(tile.id)) {
+      btn.classList.add("used");
+      btn.disabled = true;
+      btn.setAttribute("aria-pressed", "true");
+    } else {
+      btn.setAttribute("aria-pressed", "false");
+      btn.addEventListener("click", () => selectTile(tile.id));
+    }
+
+    els.tileBoard.append(btn);
   });
 }
 
-function updateHintButton() {
-  els.hintButton.setAttribute("aria-expanded", String(hintVisible));
-  if (hintVisible) {
-    els.hintButton.textContent = "초성 힌트 확인 완료";
-    els.hintButton.disabled = true;
+function refreshAnswerUi() {
+  const mission = MISSIONS[currentIndex];
+  renderAnswerSlots(mission);
+  renderTileBoard();
+  updateCheckButton();
+}
+
+/** 다음 빈 칸에 타일 채우기 */
+function selectTile(tileId) {
+  const emptyIndex = slotTileIds.findIndex((id) => id === null);
+  if (emptyIndex === -1) return;
+  if (getUsedTileIds().has(tileId)) return;
+
+  slotTileIds[emptyIndex] = tileId;
+  refreshAnswerUi();
+}
+
+/**
+ * 해당 슬롯부터 뒤쪽 슬롯을 모두 비우고 타일을 풀로 되돌림
+ * (앞에서부터 다시 고를 수 있도록)
+ */
+function clearFromSlot(startIndex) {
+  if (slotTileIds[startIndex] === null) return;
+
+  for (let i = startIndex; i < slotTileIds.length; i++) {
+    slotTileIds[i] = null;
+  }
+  refreshAnswerUi();
+}
+
+/** 선택 전부 초기화 (오답 후) */
+function clearAllSlots() {
+  slotTileIds = slotTileIds.map(() => null);
+}
+
+/** 텍스트 힌트 패널(장소 힌트·미션2 추가 힌트) 갱신 */
+function updatePlaceHint() {
+  const mission = MISSIONS[currentIndex];
+  const lines = [];
+
+  // 미션 2: 힌트 열면 초성과 함께 extraHint 즉시 표시
+  if (initialsRevealed && mission.extraHint) {
+    lines.push(mission.extraHint);
+  }
+
+  // 2회 이상 오답 시 장소 힌트 추가
+  if (wrongCount >= 2 && mission.hint) {
+    lines.push(mission.hint);
+  }
+
+  const hasText = lines.length > 0;
+  const showPanel = hasText && hintPanelOpen;
+
+  if (showPanel) {
+    els.placeHint.hidden = false;
+    els.placeHint.replaceChildren();
+    lines.forEach((text) => {
+      const p = document.createElement("p");
+      p.className = "place-hint-line";
+      p.textContent = text;
+      els.placeHint.append(p);
+    });
   } else {
-    els.hintButton.textContent = "초성 힌트 보기";
-    els.hintButton.disabled = false;
+    els.placeHint.hidden = true;
+    els.placeHint.replaceChildren();
   }
 }
 
-function openHint() {
-  if (hintVisible) return;
-  hintVisible = true;
+function updateHintButton() {
+  const mission = MISSIONS[currentIndex];
+  const hasTextHint =
+    (initialsRevealed && Boolean(mission.extraHint)) ||
+    (wrongCount >= 2 && Boolean(mission.hint));
+
+  if (!initialsRevealed) {
+    // 장소 힌트만 먼저 열린 경우에도 「힌트 보기」로 초성 단계 유도
+    els.hintButton.textContent = "힌트 보기";
+    els.hintButton.disabled = false;
+    els.hintButton.setAttribute(
+      "aria-expanded",
+      String(hintPanelOpen && wrongCount >= 2)
+    );
+    return;
+  }
+
+  // 초성은 이미 공개됨 — 텍스트 힌트가 있으면 패널 토글
+  if (hasTextHint) {
+    els.hintButton.textContent = hintPanelOpen ? "힌트 닫기" : "힌트 보기";
+    els.hintButton.disabled = false;
+    els.hintButton.setAttribute("aria-expanded", String(hintPanelOpen));
+  } else {
+    // 초성만 공개된 상태 (텍스트 힌트 없음)
+    els.hintButton.textContent = "힌트 보기";
+    els.hintButton.disabled = false;
+    els.hintButton.setAttribute("aria-expanded", "true");
+  }
+}
+
+function revealInitials() {
+  initialsRevealed = true;
   els.answerSlots.classList.add("hint-open");
   els.answerSlots
     .querySelectorAll(".initial-hint")
     .forEach((el) => el.setAttribute("aria-hidden", "false"));
-  updateHintButton();
+}
+
+function onHintButtonClick() {
+  const mission = MISSIONS[currentIndex];
+
+  if (!initialsRevealed) {
+    // 1단계: 초성 공개 (+ 미션2는 extraHint도 바로)
+    revealInitials();
+    hintPanelOpen = Boolean(mission.extraHint) || wrongCount >= 2;
+    updatePlaceHint();
+    updateHintButton();
+    return;
+  }
+
+  // 초성 공개 후: 텍스트 힌트 패널만 토글 (초성은 유지)
+  const hasTextHint =
+    Boolean(mission.extraHint) || (wrongCount >= 2 && Boolean(mission.hint));
+
+  if (hasTextHint) {
+    hintPanelOpen = !hintPanelOpen;
+    updatePlaceHint();
+    updateHintButton();
+  }
 }
 
 function renderMission() {
   const mission = MISSIONS[currentIndex];
   wrongCount = 0;
-  hintVisible = false;
+  initialsRevealed = false;
+  hintPanelOpen = false;
 
   els.missionFloor.textContent = mission.floor;
   els.missionLocation.textContent = mission.location;
@@ -351,7 +539,8 @@ function renderMission() {
   els.missionGuide.textContent = mission.locationGuide;
   els.displayQuestion.textContent = mission.displayQuestion;
   els.missionQuestion.textContent = mission.question;
-  els.guideBubble.innerHTML = "현장에서 단서를 찾아<br />알맞은 답을 골라 보세요!";
+  els.guideBubble.innerHTML =
+    "현장에서 낱말을 찾아<br />글자 조각을 순서대로 눌러 보세요!";
 
   if (mission.image) {
     els.missionImage.src = mission.image;
@@ -362,10 +551,14 @@ function renderMission() {
     els.missionImageWrap.hidden = true;
   }
 
+  // 타일 섞기 + 빈 슬롯 준비
+  boardTiles = createBoardTiles(mission);
+  slotTileIds = mission.answerSyllables.map(() => null);
+
   renderProgress();
-  renderAnswerSlots(mission);
+  refreshAnswerUi();
+  updatePlaceHint();
   updateHintButton();
-  renderOptions(mission);
 }
 
 function renderTransition(key) {
@@ -385,26 +578,33 @@ function renderTransition(key) {
   renderWordTray(els.transitionWords, 3);
 }
 
-function setOptionsDisabled(disabled) {
-  els.options.querySelectorAll(".option-button").forEach((btn) => {
+function setTilesDisabled(disabled) {
+  els.tileBoard.querySelectorAll(".tile-button").forEach((btn) => {
+    if (disabled) {
+      btn.disabled = true;
+    }
+  });
+  els.checkAnswerButton.disabled = true;
+  els.answerSlots.querySelectorAll(".answer-slot").forEach((btn) => {
     btn.disabled = disabled;
   });
 }
 
-function checkAnswer(selected) {
+function checkAnswer() {
   const mission = MISSIONS[currentIndex];
+  const selected = getSelectedWord();
+
+  if (selected.length !== mission.answerSyllables.length) return;
 
   if (selected === mission.answer) {
-    setOptionsDisabled(true);
+    setTilesDisabled(true);
     showCorrectFeedback(mission);
     return;
   }
 
+  // 오답: 횟수는 세지만 화면에 표시하지 않음
   wrongCount += 1;
   showWrongFeedback();
-  if (wrongCount >= 2) {
-    openHint();
-  }
 }
 
 function showCorrectFeedback(mission) {
@@ -457,9 +657,32 @@ function showWrongFeedback() {
 
   feedbackAction = () => {
     hideFeedback();
+    handleWrongRetry();
   };
 
   showFeedback();
+}
+
+/** 오답 확인 후: 선택 초기화 · 타일 재배치 · 초성 유지 · 2회 이상이면 장소 힌트 */
+function handleWrongRetry() {
+  const mission = MISSIONS[currentIndex];
+
+  clearAllSlots();
+  boardTiles = createBoardTiles(mission);
+  refreshAnswerUi();
+
+  // 초성이 열려 있었으면 유지
+  if (initialsRevealed) {
+    els.answerSlots.classList.add("hint-open");
+  }
+
+  // 2회 이상 오답 → 장소 힌트 패널 열기
+  if (wrongCount >= 2) {
+    hintPanelOpen = true;
+  }
+
+  updatePlaceHint();
+  updateHintButton();
 }
 
 function showSurveyPending() {
@@ -504,6 +727,53 @@ function hideConfirm() {
   els.confirmModal.hidden = true;
 }
 
+/* ----- 배경음악 ON/OFF (기본 OFF, localStorage로 유지) ----- */
+function initMusicToggle() {
+  const audio = document.getElementById("bgm");
+  const toggle = document.getElementById("musicToggle");
+  if (!audio || !toggle) return;
+
+  const textEl = toggle.querySelector(".music-toggle-text");
+  const iconEl = toggle.querySelector(".music-toggle-icon");
+
+  function updateMusicUi(isOn) {
+    toggle.setAttribute("aria-pressed", String(isOn));
+    toggle.setAttribute("aria-label", isOn ? "배경음악 끄기" : "배경음악 켜기");
+    if (textEl) textEl.textContent = isOn ? "음악 끄기" : "음악 켜기";
+    if (iconEl) iconEl.textContent = isOn ? "♫" : "♪";
+  }
+
+  async function setMusicOn(isOn) {
+    if (isOn) {
+      try {
+        audio.loop = true;
+        await audio.play();
+        localStorage.setItem(GAME_CONFIG.musicStorageKey, "1");
+        updateMusicUi(true);
+      } catch (err) {
+        // 자동재생 차단 시: 선호는 유지하고 UI만 OFF (다음 탭에서 재생)
+        updateMusicUi(false);
+      }
+    } else {
+      audio.pause();
+      localStorage.setItem(GAME_CONFIG.musicStorageKey, "0");
+      updateMusicUi(false);
+    }
+  }
+
+  toggle.addEventListener("click", () => {
+    const currentlyOn = toggle.getAttribute("aria-pressed") === "true";
+    setMusicOn(!currentlyOn);
+  });
+
+  // 기본 OFF. 이전에 ON이었으면 재생 시도(차단되면 UI는 OFF, 선호는 유지)
+  const savedOn = localStorage.getItem(GAME_CONFIG.musicStorageKey) === "1";
+  updateMusicUi(false);
+  if (savedOn) {
+    setMusicOn(true);
+  }
+}
+
 function resumeFromStorage() {
   loadProgress();
 
@@ -524,6 +794,11 @@ function resumeFromStorage() {
 }
 
 function bindEvents() {
+  // 필수 DOM이 없으면 타일 렌더가 조용히 실패하므로 초기에 확인
+  if (!els.tileBoard || !els.checkAnswerButton || !els.answerSlots) {
+    console.error("문제 화면 필수 요소를 찾지 못했습니다. index.html의 tileBoard / checkAnswerButton / answerSlots를 확인하세요.");
+  }
+
   document.getElementById("startButton").addEventListener("click", () => {
     showScreen("route");
   });
@@ -540,7 +815,8 @@ function bindEvents() {
     renderMission();
   });
 
-  els.hintButton.addEventListener("click", () => openHint());
+  els.hintButton.addEventListener("click", onHintButtonClick);
+  els.checkAnswerButton.addEventListener("click", checkAnswer);
   document.getElementById("surveyButton").addEventListener("click", openSurvey);
 
   document.getElementById("startResetButton").addEventListener("click", showConfirm);
@@ -560,4 +836,5 @@ function bindEvents() {
 }
 
 bindEvents();
+initMusicToggle();
 resumeFromStorage();
