@@ -348,6 +348,23 @@
   <!-- 배경음악 (접속 시 자동재생 시도, 버튼으로 ON/OFF) -->
   <audio id="bgm" src="music.mp3" loop preload="auto"></audio>
 
+  <!-- QR/모바일: 자동재생이 막힐 때 첫 터치로 음악 시작 -->
+  <div id="audioUnlockGate" class="audio-unlock-gate" hidden>
+    <button
+      id="audioUnlockButton"
+      class="audio-unlock-card"
+      type="button"
+      aria-label="화면을 눌러 음악과 함께 시작하기"
+    >
+      <span class="audio-unlock-icon" aria-hidden="true">♫</span>
+      <strong class="audio-unlock-title">화면을 눌러 주세요!</strong>
+      <span class="audio-unlock-desc">
+        음악과 함께<br />부기의 탐험을 시작해요
+      </span>
+      <span class="audio-unlock-cta">여기를 터치</span>
+    </button>
+  </div>
+
   <!-- 정답·오답 팝업 -->
   <div id="feedbackModal" class="modal-backdrop" hidden>
     <section

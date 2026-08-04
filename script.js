@@ -747,15 +747,16 @@ function hideConfirm() {
   els.confirmModal.hidden = true;
 }
 
-/* ----- 배경음악: 접속 시 켜기 시도, 버튼으로 끄기/켜기 ----- */
+/* ----- 배경음악: 접속 시 켜기 시도, QR/모바일은 터치 게이트로 시작 ----- */
 function initMusicToggle() {
   const audio = document.getElementById("bgm");
   const toggle = document.getElementById("musicToggle");
+  const gate = document.getElementById("audioUnlockGate");
+  const unlockBtn = document.getElementById("audioUnlockButton");
   if (!audio || !toggle) return;
 
   const textEl = toggle.querySelector(".music-toggle-text");
   const iconEl = toggle.querySelector(".music-toggle-icon");
-  let unlockBound = false;
 
   function updateMusicUi(isOn) {
     toggle.setAttribute("aria-pressed", String(isOn));
@@ -769,7 +770,17 @@ function initMusicToggle() {
     return localStorage.getItem(GAME_CONFIG.musicStorageKey) !== "0";
   }
 
-  async function setMusicOn(isOn, { fromUser = false } = {}) {
+  function showUnlockGate() {
+    if (!gate) return;
+    gate.hidden = false;
+  }
+
+  function hideUnlockGate() {
+    if (!gate) return;
+    gate.hidden = true;
+  }
+
+  async function setMusicOn(isOn, { fromToggle = false } = {}) {
     if (isOn) {
       try {
         audio.loop = true;
@@ -777,13 +788,16 @@ function initMusicToggle() {
         await audio.play();
         localStorage.setItem(GAME_CONFIG.musicStorageKey, "1");
         updateMusicUi(true);
+        hideUnlockGate();
         return true;
       } catch (err) {
-        // 브라우저 자동재생 정책으로 막힌 경우
-        if (fromUser) {
-          localStorage.setItem(GAME_CONFIG.musicStorageKey, "0");
-        }
+        // 브라우저 자동재생 정책으로 막힘 (QR·모바일에서 흔함)
         updateMusicUi(false);
+        if (fromToggle) {
+          // 상단 토글로 켜려다 실패한 경우만 OFF로 저장
+          localStorage.setItem(GAME_CONFIG.musicStorageKey, "0");
+          hideUnlockGate();
+        }
         return false;
       }
     }
@@ -791,36 +805,64 @@ function initMusicToggle() {
     audio.pause();
     localStorage.setItem(GAME_CONFIG.musicStorageKey, "0");
     updateMusicUi(false);
+    hideUnlockGate();
     return true;
   }
 
-  // 자동재생이 막히면, 첫 화면 탭/클릭 때 한 번 더 재생 시도
-  function bindAutoplayUnlock() {
-    if (unlockBound) return;
-    unlockBound = true;
-
-    const tryUnlock = () => {
-      if (!wantsMusicOn() || !audio.paused) return;
-      setMusicOn(true);
-    };
-
-    document.addEventListener("pointerdown", tryUnlock, { once: true, passive: true });
-    document.addEventListener("keydown", tryUnlock, { once: true });
+  async function unlockWithGesture() {
+    // 터치/클릭 제스처 안에서 play() 해야 iOS·Android에서 허용됨
+    const started = await setMusicOn(true);
+    if (!started) {
+      // 재생 실패해도 탐험은 진행할 수 있게 게이트만 닫음
+      hideUnlockGate();
+    }
   }
 
   toggle.addEventListener("click", (event) => {
     event.stopPropagation();
-    const currentlyOn = toggle.getAttribute("aria-pressed") === "true" && !audio.paused;
-    setMusicOn(!currentlyOn, { fromUser: true });
+    const currentlyOn = !audio.paused && toggle.getAttribute("aria-pressed") === "true";
+    setMusicOn(!currentlyOn, { fromToggle: true });
   });
+
+  if (unlockBtn) {
+    unlockBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      unlockWithGesture();
+    });
+  }
+
+  // 게이트 배경을 눌러도 시작
+  if (gate) {
+    gate.addEventListener("click", (event) => {
+      if (event.target === gate) unlockWithGesture();
+    });
+  }
+
+  // 「낱말 찾으러 출발」 등 첫 주요 버튼에서도 음악 시도 (백업)
+  const startButton = document.getElementById("startButton");
+  if (startButton) {
+    startButton.addEventListener(
+      "click",
+      () => {
+        if (wantsMusicOn() && audio.paused) {
+          setMusicOn(true);
+        }
+      },
+      true
+    );
+  }
 
   if (wantsMusicOn()) {
     updateMusicUi(true);
     setMusicOn(true).then((started) => {
-      if (!started) bindAutoplayUnlock();
+      if (!started) {
+        // QR로 들어오면 여기로 옴 → 터치 안내 표시
+        showUnlockGate();
+      }
     });
   } else {
     updateMusicUi(false);
+    hideUnlockGate();
   }
 }
 
