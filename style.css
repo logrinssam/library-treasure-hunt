@@ -645,9 +645,57 @@ button {
   background: #eef4f1;
 }
 
+.answer-slots {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  margin: 4px 0 12px;
+}
+
+.answer-slot-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.initial-hint {
+  min-height: 24px;
+  color: #176b4f;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1;
+  visibility: hidden;
+}
+
+.answer-slots.hint-open .initial-hint {
+  visibility: visible;
+}
+
+.answer-slot {
+  width: 48px;
+  height: 52px;
+  border: 2px dashed #9fbeb1;
+  border-radius: 14px;
+  background: #f7fbf8;
+}
+
+.answer-slots:has(.answer-slot-wrap:nth-child(5)) .answer-slot {
+  width: 42px;
+  height: 48px;
+}
+
+.answer-slots:has(.answer-slot-wrap:nth-child(5)) .initial-hint {
+  font-size: 16px;
+}
+
 .option-list {
   display: grid;
   gap: 10px;
+  margin-top: 4px;
 }
 
 .option-button {
@@ -685,7 +733,7 @@ button {
 
 .hint-button {
   width: 100%;
-  margin-top: 12px;
+  margin: 0 0 12px;
   min-height: 48px;
   padding: 10px 14px;
   border: 2px solid #f0d78a;
@@ -694,22 +742,12 @@ button {
   color: #8a5a10;
   font-family: var(--font-display);
   font-size: 17px;
+  touch-action: manipulation;
 }
 
-.hint-text {
-  margin: 10px 0 0;
-  padding: 12px 14px;
-  border-radius: 12px;
-  background: #fff8e0;
-  border: 2px solid #f0d78a;
-  color: #8a5a10;
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.45;
-}
-
-.hint-text[hidden] {
-  display: none !important;
+.hint-button:disabled {
+  opacity: 0.85;
+  cursor: default;
 }
 
 .reset-button {

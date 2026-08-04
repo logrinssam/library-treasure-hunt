@@ -52,7 +52,8 @@ const MISSIONS = [
     displayQuestion: "【　】",
     options: ["들락날락", "오락가락", "알락달락"],
     answer: "들락날락",
-    hint: "‘꿈뜨락어린이실’ 글자 바로 아래를 읽어보세요.",
+    answerSyllables: ["들", "락", "날", "락"],
+    hintInitials: ["ㄷ", "ㄹ", "ㄴ", "ㄹ"],
     recoveredWord: "들락날락",
     correctTitle: "첫 번째 낱말을 찾았어요!",
     correctMessage: "‘들락날락’이 탐험책으로 돌아왔어요.",
@@ -69,7 +70,8 @@ const MISSIONS = [
     displayQuestion: "당신처럼 【　】",
     options: ["애지중지", "알콩달콩", "반짝반짝"],
     answer: "애지중지",
-    hint: "부기 그림 위쪽의 분홍색 문장을 살펴보세요.",
+    answerSyllables: ["애", "지", "중", "지"],
+    hintInitials: ["ㅇ", "ㅈ", "ㅈ", "ㅈ"],
     recoveredWord: "애지중지",
     correctTitle: "부기의 소중한 낱말을 찾았어요!",
     correctMessage: "‘애지중지’가 탐험책으로 돌아왔어요.",
@@ -86,7 +88,8 @@ const MISSIONS = [
     displayQuestion: "AI 【　】 배움터",
     options: ["디지털", "과학", "독서"],
     answer: "디지털",
-    hint: "안내판 가장 위쪽의 큰 글자를 읽어보세요.",
+    answerSyllables: ["디", "지", "털"],
+    hintInitials: ["ㄷ", "ㅈ", "ㅌ"],
     recoveredWord: "디지털",
     correctTitle: "1층의 낱말을 모두 찾았어요!",
     correctMessage: "‘디지털’이 탐험책으로 돌아왔어요.",
@@ -104,7 +107,8 @@ const MISSIONS = [
     displayQuestion: "화면 속 그림의 이름",
     options: ["조선풍속도", "대동여지도", "세계지도"],
     answer: "조선풍속도",
-    hint: "화면 중앙의 가장 큰 흰색 글자를 읽어보세요.",
+    answerSyllables: ["조", "선", "풍", "속", "도"],
+    hintInitials: ["ㅈ", "ㅅ", "ㅍ", "ㅅ", "ㄷ"],
     recoveredWord: "조선풍속도",
     correctTitle: "마지막 낱말까지 찾았어요!",
     correctMessage: "‘조선풍속도’가 탐험책으로 돌아왔어요.",
@@ -157,8 +161,8 @@ const els = {
   missionImageWrap: document.getElementById("missionImageWrap"),
   missionImage: document.getElementById("missionImage"),
   options: document.getElementById("options"),
+  answerSlots: document.getElementById("answerSlots"),
   hintButton: document.getElementById("hintButton"),
-  hintText: document.getElementById("hintText"),
   guideBubble: document.getElementById("guideBubble"),
   transitionTitle: document.getElementById("transitionTitle"),
   transitionMessage: document.getElementById("transitionMessage"),
@@ -178,6 +182,8 @@ const els = {
 let currentIndex = 0;
 /** @type {number} */
 let wrongCount = 0;
+/** @type {boolean} */
+let hintVisible = false;
 /** @type {"start"|"route"|"question"|"transition"|"finish"} */
 let currentScreen = "start";
 /** @type {null | (() => void)} */
@@ -278,6 +284,28 @@ function shuffleOptions(options) {
   return shuffled;
 }
 
+function renderAnswerSlots(mission) {
+  els.answerSlots.replaceChildren();
+  els.answerSlots.classList.toggle("hint-open", hintVisible);
+
+  mission.answerSyllables.forEach((_, index) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "answer-slot-wrap";
+
+    const initial = document.createElement("span");
+    initial.className = "initial-hint";
+    initial.textContent = mission.hintInitials[index];
+    initial.setAttribute("aria-hidden", hintVisible ? "false" : "true");
+
+    const slot = document.createElement("div");
+    slot.className = "answer-slot";
+    slot.setAttribute("aria-hidden", "true");
+
+    wrapper.append(initial, slot);
+    els.answerSlots.append(wrapper);
+  });
+}
+
 function renderOptions(mission) {
   els.options.replaceChildren();
 
@@ -291,9 +319,31 @@ function renderOptions(mission) {
   });
 }
 
+function updateHintButton() {
+  els.hintButton.setAttribute("aria-expanded", String(hintVisible));
+  if (hintVisible) {
+    els.hintButton.textContent = "초성 힌트 확인 완료";
+    els.hintButton.disabled = true;
+  } else {
+    els.hintButton.textContent = "초성 힌트 보기";
+    els.hintButton.disabled = false;
+  }
+}
+
+function openHint() {
+  if (hintVisible) return;
+  hintVisible = true;
+  els.answerSlots.classList.add("hint-open");
+  els.answerSlots
+    .querySelectorAll(".initial-hint")
+    .forEach((el) => el.setAttribute("aria-hidden", "false"));
+  updateHintButton();
+}
+
 function renderMission() {
   const mission = MISSIONS[currentIndex];
   wrongCount = 0;
+  hintVisible = false;
 
   els.missionFloor.textContent = mission.floor;
   els.missionLocation.textContent = mission.location;
@@ -301,10 +351,6 @@ function renderMission() {
   els.missionGuide.textContent = mission.locationGuide;
   els.displayQuestion.textContent = mission.displayQuestion;
   els.missionQuestion.textContent = mission.question;
-  els.hintText.textContent = `힌트: ${mission.hint}`;
-  els.hintText.hidden = true;
-  els.hintButton.setAttribute("aria-expanded", "false");
-  els.hintButton.textContent = "힌트 보기";
   els.guideBubble.innerHTML = "현장에서 단서를 찾아<br />알맞은 답을 골라 보세요!";
 
   if (mission.image) {
@@ -317,6 +363,8 @@ function renderMission() {
   }
 
   renderProgress();
+  renderAnswerSlots(mission);
+  updateHintButton();
   renderOptions(mission);
 }
 
@@ -355,7 +403,7 @@ function checkAnswer(selected) {
   wrongCount += 1;
   showWrongFeedback();
   if (wrongCount >= 2) {
-    openHint(true);
+    openHint();
   }
 }
 
@@ -456,13 +504,6 @@ function hideConfirm() {
   els.confirmModal.hidden = true;
 }
 
-function openHint(forceOpen) {
-  const willOpen = forceOpen || els.hintText.hidden;
-  els.hintText.hidden = !willOpen;
-  els.hintButton.setAttribute("aria-expanded", String(willOpen));
-  els.hintButton.textContent = willOpen ? "힌트 닫기" : "힌트 보기";
-}
-
 function resumeFromStorage() {
   loadProgress();
 
@@ -499,7 +540,7 @@ function bindEvents() {
     renderMission();
   });
 
-  els.hintButton.addEventListener("click", () => openHint(false));
+  els.hintButton.addEventListener("click", () => openHint());
   document.getElementById("surveyButton").addEventListener("click", openSurvey);
 
   document.getElementById("startResetButton").addEventListener("click", showConfirm);

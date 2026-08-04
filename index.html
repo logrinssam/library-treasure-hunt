@@ -178,16 +178,22 @@
         <p id="displayQuestion" class="display-question"></p>
         <p id="missionQuestion" class="mission-clue"></p>
 
+        <div id="answerSlots" class="answer-slots" aria-label="정답 칸"></div>
+
         <figure id="missionImageWrap" class="mission-image-wrap">
           <img id="missionImage" class="mission-image" src="" alt="장소 단서 사진" />
         </figure>
 
-        <div id="options" class="option-list" role="group" aria-label="정답 선택"></div>
-
-        <button id="hintButton" class="hint-button" type="button" aria-expanded="false">
-          힌트 보기
+        <button
+          id="hintButton"
+          class="hint-button"
+          type="button"
+          aria-expanded="false"
+        >
+          초성 힌트 보기
         </button>
-        <p id="hintText" class="hint-text" hidden></p>
+
+        <div id="options" class="option-list" role="group" aria-label="정답 선택"></div>
       </article>
 
       <button id="questionResetButton" class="text-button reset-button" type="button">
