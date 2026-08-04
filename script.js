@@ -9,6 +9,7 @@
 const CHARACTER_IMAGES = {
   startBoogi: "character_image/01_start/01_boogi_reading.png",
   startDuri: "character_image/01_start/02_duri_hi.png",
+  startSeoi: "character_image/01_start/03_seoi_hi.png",
   guideSeoi: "character_image/02_question/03_seoi_pointing.png",
   correctDuri: "character_image/03_feedback/04_duri_correct_singing.png",
   retrySeoi: "character_image/03_feedback/05_seoi_retry_question.png",
