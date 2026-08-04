@@ -760,35 +760,27 @@ function initMusicToggle() {
   const iconEl = toggle.querySelector(".music-toggle-icon");
   const hintEl = document.querySelector(".start-music-hint");
 
-  function wantsMusicOn() {
-    return localStorage.getItem(GAME_CONFIG.musicStorageKey) !== "0";
-  }
-
   function updateMusicUi(isOn) {
     toggle.setAttribute("aria-pressed", String(isOn));
     toggle.setAttribute("aria-label", isOn ? "배경음악 끄기" : "배경음악 켜기");
     if (textEl) textEl.textContent = isOn ? "음악 끄기" : "음악 켜기";
     if (iconEl) iconEl.textContent = isOn ? "♫" : "♪";
-    if (hintEl) {
-      hintEl.hidden = isOn || !wantsMusicOn();
-    }
+    if (hintEl) hintEl.hidden = isOn;
   }
 
-  async function setMusicOn(isOn, { fromToggle = false } = {}) {
+  async function setMusicOn(isOn) {
     if (isOn) {
       try {
+        audio.muted = false;
         audio.loop = true;
         audio.volume = 1;
-        // play()는 클릭 핸들러 스택에서 바로 호출되어야 iOS가 허용함
         await audio.play();
         localStorage.setItem(GAME_CONFIG.musicStorageKey, "1");
         updateMusicUi(true);
         return true;
       } catch (err) {
+        console.warn("BGM play failed:", err);
         updateMusicUi(false);
-        if (fromToggle) {
-          localStorage.setItem(GAME_CONFIG.musicStorageKey, "0");
-        }
         return false;
       }
     }
@@ -799,13 +791,20 @@ function initMusicToggle() {
     return true;
   }
 
-  /** 출발 버튼 등 사용자 제스처에서 음악 시작 */
+  /**
+   * 출발 버튼 클릭 제스처에서 호출.
+   * 예전에 OFF로 저장된 값이 있어도 출발 시에는 다시 켠다.
+   */
   function startMusicFromUserGesture() {
-    if (!wantsMusicOn()) return;
-    if (!audio.paused) return;
-    // await 없이 바로 play 호출 (제스처 컨텍스트 유지)
+    if (!audio.paused && !audio.muted) {
+      updateMusicUi(true);
+      return;
+    }
+
+    audio.muted = false;
     audio.loop = true;
     audio.volume = 1;
+    // iOS: play()는 클릭 핸들러 안에서 동기적으로 시작해야 함
     const playPromise = audio.play();
     if (playPromise && typeof playPromise.then === "function") {
       playPromise
@@ -813,29 +812,31 @@ function initMusicToggle() {
           localStorage.setItem(GAME_CONFIG.musicStorageKey, "1");
           updateMusicUi(true);
         })
-        .catch(() => {
+        .catch((err) => {
+          console.warn("BGM play failed:", err);
           updateMusicUi(false);
         });
+    } else {
+      localStorage.setItem(GAME_CONFIG.musicStorageKey, "1");
+      updateMusicUi(true);
     }
   }
 
-  // 외부(bindEvents의 출발 버튼)에서 호출할 수 있게 노출
   window.__startBgmFromGesture = startMusicFromUserGesture;
 
   toggle.addEventListener("click", (event) => {
     event.stopPropagation();
     const currentlyOn = !audio.paused && toggle.getAttribute("aria-pressed") === "true";
-    setMusicOn(!currentlyOn, { fromToggle: true });
+    setMusicOn(!currentlyOn);
   });
 
-  // 이어서 진행 중이면, 주요 진행 버튼을 누를 때도 시작
   ["routeButton", "transitionButton"].forEach((id) => {
     const el = document.getElementById(id);
     if (!el) return;
     el.addEventListener("click", startMusicFromUserGesture);
   });
 
-  // 기본은 대기(꺼짐 UI). 출발 버튼을 눌러야 재생.
+  // 첫 화면: 꺼짐 UI로 시작. 출발 버튼에서 재생.
   updateMusicUi(false);
 }
 
@@ -910,3 +911,19 @@ function bindEvents() {
 bindEvents();
 initMusicToggle();
 resumeFromStorage();
+
+// 출발 버튼에 음악을 한 번 더 직접 연결 (캐시된 옛 핸들러 대비)
+(function reinforceStartBgm() {
+  const startButton = document.getElementById("startButton");
+  const audio = document.getElementById("bgm");
+  if (!startButton || !audio) return;
+  startButton.addEventListener(
+    "click",
+    () => {
+      if (typeof window.__startBgmFromGesture === "function") {
+        window.__startBgmFromGesture();
+      }
+    },
+    true
+  );
+})();
