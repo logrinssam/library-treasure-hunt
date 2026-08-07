@@ -29,18 +29,13 @@ const GAME_CONFIG = {
     title: "부기의 사라진 낱말을 찾아라!",
     message:
       "부기가 만든 도서관 탐험책에서 중요한 낱말 네 개가 사라졌어요! 두리, 서이와 함께 낱말을 찾아주세요.",
-    buttonText: "낱말 찾으러 출발!",
-  },
-
-  routeGuide: {
-    title: "사라진 낱말을 찾는 길",
-    buttonText: "첫 번째 낱말 찾기",
+    buttonText: "탐험 시작!",
   },
 
   finish: {
     title: "부기의 탐험책 완성!",
     message:
-      "네 개의 낱말이 모두 돌아와 부기의 탐험책이 다시 반짝여요!",
+      "네 개의 낱말이 제자리로 돌아왔어요!",
     buttonText: "설문조사하고 경품 교환하기",
   },
 };
@@ -49,49 +44,50 @@ const MISSIONS = [
   {
     id: "mission-1",
     order: 1,
-    floor: "1층",
-    location: "어린이실 입구",
+    placeLabel: "꿈뜨락 어린이실",
+    moveGuide: "1층 꿈뜨락 어린이실로 이동하세요!",
     storyTitle: "드나드는 아이들의 낱말",
-    locationGuide: "1층에서 사진 속 어린이실 간판을 찾아보세요.",
     question: "입구의 알록달록한 글자를 찾아 순서대로 눌러 주세요.",
     displayQuestion: "【　】",
     answer: "들락날락",
     answerSyllables: ["들", "락", "날", "락"],
     hintInitials: ["ㄷ", "ㄹ", "ㄴ", "ㄹ"],
-    tiles: ["들", "락", "날", "락", "꿈", "책", "놀", "길", "문", "별"],
+    tiles: ["들", "락", "날", "락", "꿈", "책", "문", "놀", "길", "별"],
     hint: "어린이실 입구 유리창의 초록색과 주황색 글자를 왼쪽부터 읽어보세요.",
     recoveredWord: "들락날락",
     correctTitle: "첫 번째 낱말을 찾았어요!",
     correctMessage: "‘들락날락’이 탐험책으로 돌아왔어요.",
     image: "question_image/mission-1.png",
+    guideName: "duri",
+    guideText: "1층 꿈뜨락 어린이실로 가볼까요?",
   },
   {
     id: "mission-2",
     order: 2,
-    floor: "1층",
-    location: "어린이실 안 부기존",
+    placeLabel: "부기존",
+    moveGuide: "꿈뜨락 어린이실 안 부기존으로 이동하세요!",
     storyTitle: "부기의 소중한 마음",
-    locationGuide: "어린이실 안에서 부기존을 찾아보세요.",
     question: "부기 그림 위에 쓰인 문장을 보고 ‘당신처럼’ 뒤의 낱말을 완성해 주세요.",
     displayQuestion: "당신처럼 【　】",
     answer: "애지중지",
     answerSyllables: ["애", "지", "중", "지"],
     hintInitials: ["ㅇ", "ㅈ", "ㅈ", "ㅈ"],
-    tiles: ["애", "지", "중", "지", "사", "랑", "꿈", "별", "책", "꼭"],
+    tiles: ["애", "지", "중", "지", "사", "랑", "책", "꿈", "별", "꼭"],
     hint: "부기 그림 위쪽의 분홍색 네 글자를 살펴보세요.",
     extraHint: "첫 글자는 ‘애’예요.",
     recoveredWord: "애지중지",
     correctTitle: "부기의 소중한 낱말을 찾았어요!",
     correctMessage: "‘애지중지’가 탐험책으로 돌아왔어요.",
     image: "question_image/mission-2.png",
+    guideName: "seoi",
+    guideText: "천천히 이동해요!",
   },
   {
     id: "mission-3",
     order: 3,
-    floor: "1층",
-    location: "본관 1층 AI 배움터",
+    placeLabel: "AI디지털배움터",
+    moveGuide: "본관 1층 AI디지털배움터로 이동하세요!",
     storyTitle: "미래를 여는 낱말",
-    locationGuide: "본관 1층에서 사진 속 AI 체험 공간을 찾아보세요.",
     question: "안내판에서 ‘AI’ 다음에 쓰인 세 글자를 순서대로 눌러 주세요.",
     displayQuestion: "AI 【　】 배움터",
     answer: "디지털",
@@ -100,41 +96,33 @@ const MISSIONS = [
     tiles: ["디", "지", "털", "로", "봇", "체", "험", "책", "꿈", "별"],
     hint: "안내판 가장 위쪽에서 ‘AI’ 바로 다음에 쓰인 말을 읽어보세요.",
     recoveredWord: "디지털",
-    correctTitle: "1층의 낱말을 모두 찾았어요!",
+    correctTitle: "세 번째 낱말을 찾았어요!",
     correctMessage: "‘디지털’이 탐험책으로 돌아왔어요.",
-    transitionAfter: "move-to-third-floor",
     image: "question_image/mission-3.png",
+    guideName: "duri",
+    guideText: "이번에는 AI디지털배움터예요!",
   },
   {
     id: "mission-4",
     order: 4,
-    floor: "3층",
-    location: "실감서재 안",
-    storyTitle: "옛이야기가 담긴 마지막 낱말",
-    locationGuide: "3층 실감서재 안에서 사진 속 큰 화면을 찾아보세요.",
-    question: "큰 화면 가운데 쓰인 그림의 이름을 순서대로 완성해 주세요.",
-    displayQuestion: "화면 속 그림의 이름",
-    answer: "조선풍속도",
-    answerSyllables: ["조", "선", "풍", "속", "도"],
-    hintInitials: ["ㅈ", "ㅅ", "ㅍ", "ㅅ", "ㄷ"],
-    tiles: ["조", "선", "풍", "속", "도", "옛", "날", "생", "활", "지"],
-    hint: "화면 중앙에 가장 크게 쓰인 흰색 다섯 글자를 읽어보세요.",
-    recoveredWord: "조선풍속도",
+    placeLabel: "실감서재",
+    moveGuide: "도서관 3층 실감서재로 이동하세요!",
+    storyTitle: "마지막 탐험 장소",
+    question: "이곳의 이름을 순서대로 완성해 주세요.",
+    displayQuestion: "【　】",
+    answer: "실감서재",
+    answerSyllables: ["실", "감", "서", "재"],
+    hintInitials: ["ㅅ", "ㄱ", "ㅅ", "ㅈ"],
+    tiles: ["실", "감", "서", "재", "책", "길", "관", "체", "험", "도"],
+    hint: "3층 실감서재 안내판이나 입구에 쓰인 글자를 읽어보세요.",
+    recoveredWord: "실감서재",
     correctTitle: "마지막 낱말까지 찾았어요!",
-    correctMessage: "‘조선풍속도’가 탐험책으로 돌아왔어요.",
-    image: "question_image/mission-4.png",
+    correctMessage: "‘실감서재’가 탐험책으로 돌아왔어요.",
+    image: "question_image/quiz4.png",
+    guideName: "seoi",
+    guideText: "마지막은 3층 실감서재예요!",
   },
 ];
-
-const TRANSITIONS = {
-  "move-to-third-floor": {
-    title: "마지막 낱말은 3층에 있어요!",
-    message:
-      "1층의 낱말 세 개를 모두 찾았어요. 이제 보호자와 함께 계단이나 엘리베이터를 이용해 3층으로 이동해 주세요.",
-    safetyMessage: "천천히 이동하고, 계단에서는 특히 조심해요!",
-    buttonText: "3층 마지막 미션 보기",
-  },
-};
 
 const FEEDBACK_MESSAGES = {
   wrong: {
@@ -152,9 +140,7 @@ const STORAGE = {
 
 const screens = {
   start: document.getElementById("startScreen"),
-  route: document.getElementById("routeScreen"),
   question: document.getElementById("questionScreen"),
-  transition: document.getElementById("transitionScreen"),
   finish: document.getElementById("finishScreen"),
 };
 
@@ -162,10 +148,9 @@ const els = {
   missionLabel: document.getElementById("missionLabel"),
   progressDots: document.getElementById("progressDots"),
   wordTray: document.getElementById("wordTray"),
-  missionFloor: document.getElementById("missionFloor"),
-  missionLocation: document.getElementById("missionLocation"),
+  moveGuideBox: document.getElementById("moveGuideBox"),
+  placeLabel: document.getElementById("placeLabel"),
   missionTitle: document.getElementById("missionTitle"),
-  missionGuide: document.getElementById("missionGuide"),
   displayQuestion: document.getElementById("displayQuestion"),
   missionQuestion: document.getElementById("missionQuestion"),
   missionImageWrap: document.getElementById("missionImageWrap"),
@@ -176,13 +161,8 @@ const els = {
   clearTileButton: document.getElementById("clearTileButton"),
   placeHint: document.getElementById("placeHint"),
   hintButton: document.getElementById("hintButton"),
+  guideCharacter: document.getElementById("guideCharacter"),
   guideBubble: document.getElementById("guideBubble"),
-  transitionTitle: document.getElementById("transitionTitle"),
-  transitionMessage: document.getElementById("transitionMessage"),
-  transitionSafety: document.getElementById("transitionSafety"),
-  transitionButton: document.getElementById("transitionButton"),
-  transitionWords: document.getElementById("transitionWords"),
-  recoveredWords: document.getElementById("recoveredWords"),
   feedbackModal: document.getElementById("feedbackModal"),
   feedbackImage: document.getElementById("feedbackImage"),
   feedbackTitle: document.getElementById("feedbackTitle"),
@@ -199,7 +179,7 @@ let wrongCount = 0;
 let initialsRevealed = false;
 /** @type {boolean} 텍스트 힌트 패널 표시 여부 */
 let hintPanelOpen = false;
-/** @type {"start"|"route"|"question"|"transition"|"finish"} */
+/** @type {"start"|"question"|"finish"} */
 let currentScreen = "start";
 /** @type {null | (() => void)} */
 let feedbackAction = null;
@@ -238,13 +218,11 @@ function loadProgress() {
   const savedScreen = localStorage.getItem(STORAGE.screen);
   const savedIndex = parseInt(localStorage.getItem(STORAGE.index) ?? "0", 10);
 
-  if (
-    savedScreen === "route" ||
-    savedScreen === "question" ||
-    savedScreen === "transition" ||
-    savedScreen === "finish"
-  ) {
+  if (savedScreen === "question" || savedScreen === "finish" || savedScreen === "start") {
     currentScreen = savedScreen;
+  } else if (savedScreen === "route" || savedScreen === "transition") {
+    // 예전 중간 화면 저장값은 문제 화면으로 이어가기
+    currentScreen = "question";
   }
 
   if (!Number.isNaN(savedIndex) && savedIndex >= 0 && savedIndex < MISSIONS.length) {
@@ -291,7 +269,7 @@ function renderWordTray(targetEl, foundCount) {
 
 function renderProgress() {
   const total = MISSIONS.length;
-  els.missionLabel.textContent = `미션 ${currentIndex + 1} / ${total}`;
+  els.missionLabel.textContent = `${currentIndex + 1} / ${total}`;
   els.progressDots.replaceChildren();
 
   for (let i = 0; i < total; i++) {
@@ -492,8 +470,7 @@ function updateHintButton() {
     (wrongCount >= 2 && Boolean(mission.hint));
 
   if (!initialsRevealed) {
-    // 장소 힌트만 먼저 열린 경우에도 「힌트 보기」로 초성 단계 유도
-    els.hintButton.textContent = "힌트 보기";
+    els.hintButton.textContent = "초성 힌트 보기";
     els.hintButton.disabled = false;
     els.hintButton.setAttribute(
       "aria-expanded",
@@ -502,14 +479,12 @@ function updateHintButton() {
     return;
   }
 
-  // 초성은 이미 공개됨 — 텍스트 힌트가 있으면 패널 토글
   if (hasTextHint) {
-    els.hintButton.textContent = hintPanelOpen ? "힌트 닫기" : "힌트 보기";
+    els.hintButton.textContent = hintPanelOpen ? "힌트 닫기" : "초성 힌트 보기";
     els.hintButton.disabled = false;
     els.hintButton.setAttribute("aria-expanded", String(hintPanelOpen));
   } else {
-    // 초성만 공개된 상태 (텍스트 힌트 없음)
-    els.hintButton.textContent = "힌트 보기";
+    els.hintButton.textContent = "초성 힌트 보기";
     els.hintButton.disabled = false;
     els.hintButton.setAttribute("aria-expanded", "true");
   }
@@ -552,18 +527,34 @@ function renderMission() {
   initialsRevealed = false;
   hintPanelOpen = false;
 
-  els.missionFloor.textContent = mission.floor;
-  els.missionLocation.textContent = mission.location;
+  if (els.moveGuideBox) {
+    els.moveGuideBox.textContent = mission.moveGuide;
+  }
+  if (els.placeLabel) {
+    els.placeLabel.textContent = `[${mission.placeLabel}]`;
+  }
   els.missionTitle.textContent = mission.storyTitle;
-  els.missionGuide.textContent = mission.locationGuide;
   els.displayQuestion.textContent = mission.displayQuestion;
   els.missionQuestion.textContent = mission.question;
-  els.guideBubble.innerHTML =
-    "현장에서 낱말을 찾아<br />글자 조각을 순서대로 눌러 보세요!";
+
+  if (els.guideBubble) {
+    els.guideBubble.textContent = mission.guideText;
+    els.guideBubble.classList.toggle("duri", mission.guideName === "duri");
+    els.guideBubble.classList.toggle("seoi", mission.guideName === "seoi");
+  }
+  if (els.guideCharacter) {
+    if (mission.guideName === "duri") {
+      els.guideCharacter.src = CHARACTER_IMAGES.startDuri;
+      els.guideCharacter.alt = "두리";
+    } else {
+      els.guideCharacter.src = CHARACTER_IMAGES.guideSeoi;
+      els.guideCharacter.alt = "서이";
+    }
+  }
 
   if (mission.image) {
     els.missionImage.src = mission.image;
-    els.missionImage.alt = `${mission.location} 단서 사진`;
+    els.missionImage.alt = `${mission.placeLabel} 단서 사진`;
     els.missionImageWrap.hidden = false;
   } else {
     els.missionImage.removeAttribute("src");
@@ -578,23 +569,6 @@ function renderMission() {
   refreshAnswerUi();
   updatePlaceHint();
   updateHintButton();
-}
-
-function renderTransition(key) {
-  const data = TRANSITIONS[key];
-
-  if (key === "move-to-third-floor") {
-    els.transitionTitle.innerHTML = "마지막 낱말은<br />3층에 있어요!";
-    els.transitionMessage.innerHTML =
-      "1층의 낱말 세 개를 모두 찾았어요.<br />이제 보호자와 함께 계단이나 엘리베이터를 이용해<br /><strong>3층으로 이동해 주세요.</strong>";
-  } else {
-    els.transitionTitle.textContent = data.title;
-    els.transitionMessage.textContent = data.message;
-  }
-
-  els.transitionSafety.textContent = data.safetyMessage;
-  els.transitionButton.textContent = data.buttonText;
-  renderWordTray(els.transitionWords, 3);
 }
 
 function setTilesDisabled(disabled) {
@@ -629,32 +603,18 @@ function checkAnswer() {
 
 function showCorrectFeedback(mission) {
   const isLast = currentIndex >= MISSIONS.length - 1;
-  const hasTransition = Boolean(mission.transitionAfter);
 
   els.feedbackImage.src = CHARACTER_IMAGES.correctDuri;
   els.feedbackImage.alt = "정답을 축하하는 두리";
   els.feedbackTitle.textContent = mission.correctTitle;
   els.feedbackMessage.textContent = mission.correctMessage;
-
-  if (isLast) {
-    els.feedbackButton.textContent = "탐험책 확인하기";
-  } else if (hasTransition) {
-    els.feedbackButton.textContent = "다음으로";
-  } else {
-    els.feedbackButton.textContent = "다음 낱말 찾기";
-  }
+  els.feedbackButton.textContent = isLast ? "탐험책 확인하기" : "다음 낱말 찾기";
 
   feedbackAction = () => {
     hideFeedback();
 
     if (isLast) {
       showScreen("finish");
-      return;
-    }
-
-    if (hasTransition) {
-      renderTransition(mission.transitionAfter);
-      showScreen("transition");
       return;
     }
 
@@ -748,8 +708,8 @@ function hideConfirm() {
 }
 
 /* ----- 배경음악 -----
- * 모바일/QR은 자동재생이 막히므로
- * 「낱말 찾으러 출발!」을 누를 때 재생합니다.
+ * OFF 상태는 화면 전환·새로고침 후에도 유지됩니다.
+ * ON일 때만 재생하며, 중복 play()를 피합니다.
  */
 function initMusicToggle() {
   const audio = document.getElementById("bgm");
@@ -759,6 +719,10 @@ function initMusicToggle() {
   const textEl = toggle.querySelector(".music-toggle-text");
   const iconEl = toggle.querySelector(".music-toggle-icon");
   const hintEl = document.querySelector(".start-music-hint");
+
+  function isMusicEnabled() {
+    return localStorage.getItem(GAME_CONFIG.musicStorageKey) === "1";
+  }
 
   function updateMusicUi(isOn) {
     toggle.setAttribute("aria-pressed", String(isOn));
@@ -774,7 +738,9 @@ function initMusicToggle() {
         audio.muted = false;
         audio.loop = true;
         audio.volume = 1;
-        await audio.play();
+        if (audio.paused) {
+          await audio.play();
+        }
         localStorage.setItem(GAME_CONFIG.musicStorageKey, "1");
         updateMusicUi(true);
         return true;
@@ -792,11 +758,18 @@ function initMusicToggle() {
   }
 
   /**
-   * 출발 버튼 클릭 제스처에서 호출.
-   * 예전에 OFF로 저장된 값이 있어도 출발 시에는 다시 켠다.
+   * 사용자 제스처에서 호출.
+   * 사용자가 OFF로 저장한 경우 강제 재생하지 않음.
    */
   function startMusicFromUserGesture() {
+    if (!isMusicEnabled() && localStorage.getItem(GAME_CONFIG.musicStorageKey) === "0") {
+      updateMusicUi(false);
+      return;
+    }
+
+    // 첫 방문(값 없음)이거나 ON이면 재생
     if (!audio.paused && !audio.muted) {
+      localStorage.setItem(GAME_CONFIG.musicStorageKey, "1");
       updateMusicUi(true);
       return;
     }
@@ -804,7 +777,6 @@ function initMusicToggle() {
     audio.muted = false;
     audio.loop = true;
     audio.volume = 1;
-    // iOS: play()는 클릭 핸들러 안에서 동기적으로 시작해야 함
     const playPromise = audio.play();
     if (playPromise && typeof playPromise.then === "function") {
       playPromise
@@ -823,35 +795,37 @@ function initMusicToggle() {
   }
 
   window.__startBgmFromGesture = startMusicFromUserGesture;
+  window.__setBgmOn = setMusicOn;
 
   toggle.addEventListener("click", (event) => {
     event.stopPropagation();
-    const currentlyOn = !audio.paused && toggle.getAttribute("aria-pressed") === "true";
+    const currentlyOn =
+      !audio.paused && toggle.getAttribute("aria-pressed") === "true";
     setMusicOn(!currentlyOn);
   });
 
-  ["routeButton", "transitionButton"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.addEventListener("click", startMusicFromUserGesture);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      if (!audio.paused) audio.pause();
+    } else if (isMusicEnabled()) {
+      audio.play().catch(() => {});
+    }
   });
 
-  // 첫 화면: 꺼짐 UI로 시작. 출발 버튼에서 재생.
-  updateMusicUi(false);
+  // 저장된 OFF는 OFF 유지. ON이면 UI만 ON으로 두고 제스처 후 재생.
+  if (isMusicEnabled()) {
+    updateMusicUi(true);
+  } else {
+    updateMusicUi(false);
+  }
 }
 
 function resumeFromStorage() {
   loadProgress();
 
-  if (currentScreen === "route") {
-    showScreen("route");
-  } else if (currentScreen === "question") {
+  if (currentScreen === "question") {
     showScreen("question");
     renderMission();
-  } else if (currentScreen === "transition") {
-    // After mission 3, index is still 2 until user continues
-    renderTransition("move-to-third-floor");
-    showScreen("transition");
   } else if (currentScreen === "finish") {
     showScreen("finish");
   } else {
@@ -860,27 +834,15 @@ function resumeFromStorage() {
 }
 
 function bindEvents() {
-  // 필수 DOM이 없으면 타일 렌더가 조용히 실패하므로 초기에 확인
   if (!els.tileBoard || !els.checkAnswerButton || !els.answerSlots) {
     console.error("문제 화면 필수 요소를 찾지 못했습니다. index.html의 tileBoard / checkAnswerButton / answerSlots를 확인하세요.");
   }
 
   document.getElementById("startButton").addEventListener("click", () => {
-    // QR/모바일: 출발 제스처에서 배경음악 시작
     if (typeof window.__startBgmFromGesture === "function") {
       window.__startBgmFromGesture();
     }
-    showScreen("route");
-  });
-
-  document.getElementById("routeButton").addEventListener("click", () => {
     currentIndex = 0;
-    showScreen("question");
-    renderMission();
-  });
-
-  document.getElementById("transitionButton").addEventListener("click", () => {
-    currentIndex = 3;
     showScreen("question");
     renderMission();
   });

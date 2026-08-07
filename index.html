@@ -27,7 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Jua&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=20260804face" />
+  <link rel="stylesheet" href="style.css?v=20260807lth" />
 </head>
 <body>
   <div class="app-shell" id="app">
@@ -57,19 +57,7 @@
         부기의 사라진<br />낱말을 찾아라!
       </h1>
 
-      <p id="startMessage" class="start-description">
-        부기가 만든 도서관 탐험책에서<br />
-        중요한 낱말 네 개가 사라졌어요!<br />
-        두리, 서이와 함께 낱말을 찾아주세요.
-      </p>
-
       <div class="start-characters" aria-hidden="true">
-        <!-- 부기를 첫 이미지로 두어 링크 썸네일/미리보기에 부기가 나오게 함 -->
-        <img
-          class="start-character boogi-character"
-          src="character_image/01_start/01_boogi_reading.png"
-          alt=""
-        />
         <img
           class="start-character duri-character"
           src="character_image/01_start/02_duri_hi.png"
@@ -77,28 +65,17 @@
         />
         <img
           class="start-character seoi-character"
-          src="character_image/01_start/03_seoi_hi.png"
+          src="character_image/02_question/03_seoi_pointing.png"
           alt=""
         />
       </div>
 
-      <div class="speech-list">
-        <div class="character-message">
-          <strong class="character-name">부기</strong>
-          <span>사라진 낱말을 찾아 탐험책을 완성해 줄래?</span>
-        </div>
-        <div class="character-message">
-          <strong class="character-name duri">두리</strong>
-          <span>정답을 찾으면 내가 알려 줄게!</span>
-        </div>
-        <div class="character-message">
-          <strong class="character-name seoi">서이</strong>
-          <span>도서관에서는 뛰지 않고 천천히 이동해요.</span>
-        </div>
+      <div class="safety-notice" role="note">
+        서이와 함께 도서관에서 뛰지 않고 천천히 이동해요!
       </div>
 
       <button id="startButton" class="primary-button" type="button">
-        낱말 찾으러 출발!
+        탐험 시작!
       </button>
       <p class="start-music-hint">♪ 출발하면 음악이 함께 나요</p>
 
@@ -107,110 +84,34 @@
       </button>
     </section>
 
-    <!-- 2. 사라진 낱말을 찾는 길 -->
-    <section id="routeScreen" class="screen route-screen" aria-labelledby="routeTitle">
-      <h1 id="routeTitle" class="screen-heading">사라진 낱말을 찾는 길</h1>
-
-      <p class="route-lead">
-        1층에서 세 낱말을 찾고,<br />
-        3층에서 마지막 낱말을 찾아요!
-      </p>
-
-      <div class="route-blocks" aria-label="탐험 순서">
-        <section class="route-block">
-          <header class="route-block-head">
-            <h2 class="route-block-title">1층에서 낱말 3개 찾기</h2>
-          </header>
-          <ol class="route-block-list">
-            <li>
-              <span class="route-no">1</span>
-              <span class="route-place">
-                <strong>꿈뜨락어린이실 입구</strong>
-                <em>첫 번째 낱말</em>
-              </span>
-            </li>
-            <li>
-              <span class="route-no">2</span>
-              <span class="route-place">
-                <strong>꿈뜨락어린이실 안 부기존</strong>
-                <em>두 번째 낱말</em>
-              </span>
-            </li>
-            <li>
-              <span class="route-no">3</span>
-              <span class="route-place">
-                <strong>본관 AI 배움터</strong>
-                <em>세 번째 낱말</em>
-              </span>
-            </li>
-          </ol>
-        </section>
-
-        <section class="route-move-block" aria-label="층 이동">
-          <h2 class="route-move-title">이제 3층으로 이동해요</h2>
-          <p class="route-move-text">보호자와 함께 계단이나 엘리베이터를 이용해요.</p>
-        </section>
-
-        <section class="route-block route-block-3f">
-          <header class="route-block-head">
-            <h2 class="route-block-title">3층에서 마지막 낱말 찾기</h2>
-          </header>
-          <ol class="route-block-list" start="4">
-            <li>
-              <span class="route-no route-no-3f">4</span>
-              <span class="route-place">
-                <strong>실감서재 안 큰 화면</strong>
-                <em>마지막 낱말</em>
-              </span>
-            </li>
-          </ol>
-        </section>
-      </div>
-
-      <div class="route-outro">
-        <img
-          class="route-outro-character"
-          src="character_image/02_question/03_seoi_pointing.png"
-          alt=""
-          aria-hidden="true"
-        />
-        <p class="route-outro-bubble">
-          <strong class="character-name seoi">서이</strong>
-          도서관에서는 뛰지 않고 천천히 이동해요!
-        </p>
-      </div>
-
-      <button id="routeButton" class="primary-button" type="button">
-        첫 번째 낱말 찾기
-      </button>
-    </section>
-
-    <!-- 3. 공통 문제 화면 -->
+    <!-- 2. 공통 문제 화면 -->
     <section id="questionScreen" class="screen question-screen" aria-labelledby="missionTitle">
       <header class="mission-header">
-        <span id="missionLabel" class="mission-label">미션 1 / 4</span>
+        <span id="missionLabel" class="mission-label">1 / 4</span>
         <div id="progressDots" class="progress-dots" aria-label="진행 상황"></div>
         <div id="wordTray" class="word-tray" aria-label="찾은 낱말"></div>
       </header>
 
+      <div id="moveGuideBox" class="move-guide-box" role="status">
+        1층 꿈뜨락 어린이실로 이동하세요!
+      </div>
+
       <article class="question-card">
         <div class="guide-row">
           <img
+            id="guideCharacter"
             class="guide-character"
             src="character_image/02_question/03_seoi_pointing.png"
             alt="문제를 안내하는 서이"
           />
           <div id="guideBubble" class="guide-bubble">
-            현장에서 낱말을 찾아<br />
-            글자 조각을 순서대로 눌러 보세요!
+            두리와 함께 이동해요!
           </div>
         </div>
 
-        <p id="missionFloor" class="floor-chip">1층</p>
-        <p id="missionLocation" class="location-tag">어린이실 입구</p>
+        <p id="placeLabel" class="place-label">[꿈뜨락 어린이실]</p>
 
         <h2 id="missionTitle" class="mission-title">드나드는 아이들의 낱말</h2>
-        <p id="missionGuide" class="mission-guide"></p>
         <p id="displayQuestion" class="display-question"></p>
         <p id="missionQuestion" class="mission-clue"></p>
 
@@ -230,7 +131,7 @@
           type="button"
           aria-expanded="false"
         >
-          힌트 보기
+          초성 힌트 보기
         </button>
 
         <!-- 10개 글자 조각 (문제마다 섞어서 표시) -->
@@ -262,42 +163,12 @@
       </button>
     </section>
 
-    <!-- 4. 1층 → 3층 이동 안내 -->
-    <section id="transitionScreen" class="screen transition-screen" aria-labelledby="transitionTitle">
-      <h1 id="transitionTitle" class="screen-heading">
-        마지막 낱말은<br />3층에 있어요!
-      </h1>
-
-      <img
-        class="transition-character"
-        src="character_image/02_question/03_seoi_pointing.png"
-        alt="길을 안내하는 서이"
-      />
-
-      <p id="transitionMessage" class="transition-message">
-        1층의 낱말 세 개를 모두 찾았어요.<br />
-        이제 보호자와 함께 계단이나 엘리베이터를 이용해<br />
-        <strong>3층으로 이동해 주세요.</strong>
-      </p>
-
-      <div class="character-message">
-        <strong class="character-name seoi">서이</strong>
-        <span id="transitionSafety">천천히 이동하고, 계단에서는 특히 조심해요!</span>
-      </div>
-
-      <div id="transitionWords" class="word-tray word-tray-large" aria-label="찾은 낱말"></div>
-
-      <button id="transitionButton" class="primary-button" type="button">
-        3층 마지막 미션 보기
-      </button>
-    </section>
-
-    <!-- 5. 최종 완료 -->
+    <!-- 3. 최종 완료 -->
     <section id="finishScreen" class="screen finish-screen" aria-labelledby="finishTitle">
       <div class="finish-badge">미션 4/4 성공</div>
 
       <h1 id="finishTitle" class="finish-title">부기의 탐험책 완성!</h1>
-      <p class="finish-subtitle">네 개의 낱말을 모두 되찾았어요.</p>
+      <p class="finish-subtitle">네 개의 낱말이 제자리로 돌아왔어요!</p>
 
       <div class="finish-hero-wrap">
         <div class="finish-hero">
@@ -314,13 +185,13 @@
           <span class="word-chip word-yellow">✓ 들락날락</span>
           <span class="word-chip word-pink">✓ 애지중지</span>
           <span class="word-chip word-sky">✓ 디지털</span>
-          <span class="word-chip word-beige">✓ 조선풍속도</span>
+          <span class="word-chip word-beige">✓ 실감서재</span>
         </div>
       </section>
 
       <div class="finish-thanks">
         <strong>부기</strong>
-        <p>내 탐험책을 완성해 줘서 정말 고마워!</p>
+        <p>부기의 도서관 탐험책이 다시 완성되었어요!</p>
       </div>
 
       <button id="surveyButton" class="primary-button survey-button" type="button">
@@ -390,6 +261,6 @@
     </section>
   </div>
 
-  <script src="script.js?v=20260804face"></script>
+  <script src="script.js?v=20260807lth"></script>
 </body>
 </html>
