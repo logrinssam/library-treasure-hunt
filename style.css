@@ -672,11 +672,6 @@ button {
   color: var(--seoi);
 }
 
-/* 시작 화면: 두리 + 서이만 */
-.boogi-character {
-  display: none !important;
-}
-
 .progress-dots {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
