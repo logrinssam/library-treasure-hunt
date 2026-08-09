@@ -18,6 +18,8 @@
   --font-body: "Nunito", "Jua", sans-serif;
   --app-pad-x: 16px;
   --btn-h: 64px;
+  /* 단서 사진 높이 — 로드 전에도 자리를 잡아 두려고 변수로 뺐다 */
+  --clue-img-h: min(22vh, 180px);
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
@@ -67,6 +69,55 @@ button {
   appearance: none;
   -webkit-appearance: none;
   touch-action: manipulation;
+}
+
+/* 키보드·스위치 사용자가 현재 위치를 볼 수 있도록 (이전에는 글자 조각에만 있었다) */
+:where(button, a, [tabindex]):focus-visible {
+  outline: 3px solid #1f8a64;
+  outline-offset: 2px;
+}
+
+/* 화면에는 보이지 않고 스크린리더만 읽는 영역 */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 모달이 열려 있는 동안 뒤 화면이 스크롤되지 않도록 */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* 스크립트가 죽었을 때 흰 화면 대신 보여 줄 마지막 안내 */
+.fatal-error {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px;
+  background: var(--white);
+  text-align: center;
+}
+
+.fatal-error p {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1.5;
+  word-break: keep-all;
 }
 
 .app-shell {
@@ -233,17 +284,6 @@ button {
   to { opacity: 1; }
 }
 
-.screen-heading {
-  margin: 0 0 12px;
-  font-family: var(--font-display);
-  font-size: clamp(26px, 7vw, 34px);
-  line-height: 1.3;
-  text-align: center;
-  color: var(--green-deep);
-  font-weight: 400;
-  word-break: keep-all;
-}
-
 /* ----- 버튼 ----- */
 .primary-button {
   display: inline-flex;
@@ -326,14 +366,6 @@ button {
   font-weight: 400;
 }
 
-.start-description {
-  margin: 14px 0 0;
-  color: var(--muted);
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 1.55;
-}
-
 .start-characters {
   position: relative;
   width: 100%;
@@ -390,216 +422,6 @@ button {
   50% { transform: rotate(7deg) translateY(-6px); }
 }
 
-.speech-list {
-  width: 100%;
-  display: grid;
-  gap: 8px;
-  margin: 8px 0 16px;
-}
-
-.character-message {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 11px 13px;
-  border-radius: 16px;
-  background: var(--cream);
-  border: 2px solid #f0e4c8;
-  color: var(--ink);
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.4;
-  text-align: left;
-}
-
-.character-name {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 10px;
-  border-radius: 999px;
-  background: #ffe8a3;
-  color: var(--green-deep);
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 400;
-}
-
-.character-name.duri {
-  background: var(--pink);
-  color: var(--duri);
-}
-
-.character-name.seoi {
-  background: var(--green-soft);
-  color: var(--seoi);
-}
-
-/* ===== 탐험 길 ===== */
-.route-screen {
-  text-align: center;
-}
-
-.route-lead {
-  margin: -4px 0 18px;
-  color: var(--muted);
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 1.55;
-}
-
-.route-blocks {
-  width: 100%;
-  display: grid;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.route-block {
-  padding: 16px 16px 14px;
-  border-radius: 22px;
-  background: #f7fbf9;
-  border: 2px solid var(--line);
-  text-align: left;
-}
-
-.route-block-3f {
-  background: #fffaf3;
-  border-color: #f0d9b8;
-}
-
-.route-block-head {
-  margin-bottom: 12px;
-}
-
-.route-block-title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 400;
-  color: var(--green-deep);
-  line-height: 1.35;
-}
-
-.route-block-3f .route-block-title {
-  color: #9a5a18;
-}
-
-.route-block-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 8px;
-}
-
-.route-block-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 11px 12px;
-  border-radius: 14px;
-  background: var(--white);
-}
-
-.route-no {
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  margin-top: 1px;
-  border-radius: 50%;
-  background: var(--green);
-  color: #fff;
-  font-family: var(--font-display);
-  font-size: 14px;
-  flex-shrink: 0;
-}
-
-.route-no-3f {
-  background: #c4782a;
-}
-
-.route-place {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.route-place strong {
-  font-family: var(--font-display);
-  font-size: 17px;
-  font-weight: 400;
-  color: var(--ink);
-  line-height: 1.35;
-}
-
-.route-place em {
-  font-style: normal;
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.route-move-block {
-  padding: 14px 16px;
-  border-radius: 18px;
-  background: #fff8e0;
-  border: 2px dashed #f0d78a;
-  text-align: center;
-}
-
-.route-move-title {
-  margin: 0 0 4px;
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 400;
-  color: #8a5a10;
-}
-
-.route-move-text {
-  margin: 0;
-  color: #8a5a10;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.4;
-}
-
-.route-outro {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  width: 100%;
-  margin: 2px 0 16px;
-  text-align: left;
-}
-
-.route-outro-character {
-  width: 72px;
-  height: 80px;
-  object-fit: contain;
-  object-position: bottom;
-  flex-shrink: 0;
-}
-
-.route-outro-bubble {
-  flex: 1;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  padding: 12px 13px;
-  border-radius: 16px 16px 16px 4px;
-  background: var(--green-soft);
-  color: var(--green-deep);
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.4;
-}
-
 /* ===== 문제 ===== */
 .question-screen {
   align-items: stretch;
@@ -619,31 +441,47 @@ button {
   color: var(--green-deep);
 }
 
-.move-guide-box {
+.move-guide-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   width: 100%;
   margin: 0 0 12px;
-  padding: 16px 14px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #1f8a64 0%, #1f6f8b 100%);
-  color: #fff;
-  font-family: var(--font-display);
-  font-size: clamp(18px, 5.2vw, 22px);
-  line-height: 1.4;
-  text-align: center;
-  word-break: keep-all;
-  box-shadow: 0 8px 0 rgba(15, 77, 58, 0.35);
 }
 
-.place-label {
-  display: inline-flex;
-  margin: 0 0 10px;
-  padding: 6px 12px;
-  border-radius: 12px;
-  background: #fff3c4;
-  color: #8a5a10;
+.guide-character {
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+  object-fit: contain;
+  object-position: bottom center;
+}
+
+.guide-bubble {
+  flex: 1;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 16px 16px 16px 6px;
+  color: var(--green-deep);
+  background: #f3faf6;
+  border: 2px solid #d5ebdf;
   font-family: var(--font-display);
-  font-size: clamp(15px, 4.2vw, 17px);
+  font-size: clamp(16px, 4.5vw, 18px);
   font-weight: 400;
+  line-height: 1.4;
+  word-break: keep-all;
+}
+
+.guide-bubble.duri {
+  background: #fff5f8;
+  border-color: #f3c9d5;
+  color: var(--duri);
+}
+
+.guide-bubble.seoi {
+  background: #f3faf6;
+  border-color: #d5ebdf;
+  color: var(--seoi);
 }
 
 .safety-notice {
@@ -660,16 +498,6 @@ button {
   line-height: 1.45;
   word-break: keep-all;
   text-align: center;
-}
-
-.guide-bubble.duri {
-  background: var(--pink);
-  color: var(--duri);
-}
-
-.guide-bubble.seoi {
-  background: var(--green-soft);
-  color: var(--seoi);
 }
 
 .progress-dots {
@@ -700,11 +528,7 @@ button {
   gap: 6px;
 }
 
-.word-tray-large {
-  width: 100%;
-  margin: 14px 0 18px;
-}
-
+/* 문제 화면 상단 트레이 칩 (완료 화면 칩은 .recovered-chip) */
 .word-chip {
   padding: 7px 8px;
   border-radius: 12px;
@@ -737,71 +561,6 @@ button {
   box-shadow: var(--shadow);
 }
 
-.guide-row {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.guide-character {
-  width: clamp(68px, 20vw, 88px);
-  height: clamp(76px, 22vw, 98px);
-  flex-shrink: 0;
-  object-fit: contain;
-  object-position: bottom;
-}
-
-.guide-bubble {
-  flex: 1;
-  padding: 11px 12px;
-  border-radius: 16px 16px 16px 4px;
-  color: var(--green-deep);
-  background: var(--green-soft);
-  font-size: 14px;
-  font-weight: 750;
-  line-height: 1.45;
-}
-
-.floor-chip {
-  display: inline-flex;
-  margin: 0 6px 0 0;
-  padding: 3px 10px;
-  border-radius: 999px;
-  background: var(--green);
-  color: #fff;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.location-tag {
-  display: inline-flex;
-  margin: 0 0 8px;
-  padding: 3px 10px;
-  border-radius: 999px;
-  background: #fff3c4;
-  color: #8a5a10;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.mission-title {
-  margin: 0 0 8px;
-  font-family: var(--font-display);
-  font-size: clamp(22px, 6vw, 26px);
-  line-height: 1.3;
-  color: var(--ink);
-  font-weight: 400;
-}
-
-.mission-guide {
-  margin: 0 0 6px;
-  color: var(--muted);
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.45;
-}
-
 .display-question {
   margin: 0 0 8px;
   padding: 12px 14px;
@@ -810,10 +569,11 @@ button {
   border: 2px dashed #b7dccb;
   color: var(--green-deep);
   font-family: var(--font-display);
-  font-size: 22px;
+  font-size: clamp(18px, 5vw, 22px);
   text-align: center;
   font-weight: 400;
   letter-spacing: 0.02em;
+  word-break: keep-all;
 }
 
 .mission-clue {
@@ -830,6 +590,8 @@ button {
   overflow: hidden;
   background: #f3f7f5;
   border: 2px solid var(--line);
+  /* 사진이 도착하기 전에도 높이를 잡아 둔다 — 뒤늦게 로드되며 아래 내용을 밀지 않도록 */
+  min-height: var(--clue-img-h);
 }
 
 .mission-image-wrap[hidden] {
@@ -839,7 +601,7 @@ button {
 .mission-image {
   display: block;
   width: 100%;
-  max-height: min(22vh, 180px);
+  height: var(--clue-img-h);
   object-fit: contain;
   object-position: center top;
   background: #eef4f1;
@@ -977,11 +739,11 @@ button {
   box-shadow: 0 3px 0 rgba(32, 70, 55, 0.1);
 }
 
+/* outline은 지우지 않는다 — 전역 포커스 링이 그대로 보여야 한다 */
 .tile-button:hover,
 .tile-button:focus-visible {
   border-color: var(--green);
   background: #f1faf5;
-  outline: none;
 }
 
 .tile-button:active:not(:disabled) {
@@ -1057,31 +819,6 @@ button {
 .reset-button {
   margin-top: 14px;
   align-self: center;
-}
-
-/* ===== 층 이동 ===== */
-.transition-screen {
-  text-align: center;
-}
-
-.transition-character {
-  display: block;
-  width: min(160px, 42vw);
-  margin: 4px auto 12px;
-  object-fit: contain;
-  filter: drop-shadow(0 10px 16px rgba(23, 107, 79, 0.15));
-}
-
-.transition-message {
-  margin: 0 0 14px;
-  color: var(--muted);
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 1.6;
-}
-
-.transition-message strong {
-  color: var(--green-deep);
 }
 
 /* ===== 완료 ===== */
@@ -1163,7 +900,12 @@ button {
   gap: 7px;
 }
 
-.word-chip {
+/*
+ * 완료 화면 칩. 예전에는 문제 화면과 같은 .word-chip을 썼는데,
+ * 이 규칙이 나중에 선언되는 바람에 문제 화면의 "아직 못 찾은 낱말"까지
+ * 연녹색으로 칠해져 찾은 것과 구분이 안 됐다. 그래서 이름을 분리했다.
+ */
+.recovered-chip {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1178,22 +920,22 @@ button {
   font-weight: 400;
 }
 
-.word-yellow {
+.recovered-chip.tone-yellow {
   background: #fff6d6;
   border-color: #f0df9a;
 }
 
-.word-pink {
+.recovered-chip.tone-pink {
   background: #ffe8ef;
   border-color: #f3c0ce;
 }
 
-.word-sky {
+.recovered-chip.tone-sky {
   background: #e5f5fb;
   border-color: #b7dceb;
 }
 
-.word-beige {
+.recovered-chip.tone-beige {
   background: #f7efe4;
   border-color: #e2d0b6;
 }
@@ -1226,12 +968,6 @@ button {
   margin-top: 0;
   margin-bottom: 14px;
   font-size: 19px;
-}
-
-/* 완료 화면 전용 로고는 공통 푸터로 대체 */
-.research-logo,
-.finish-credit {
-  display: none;
 }
 
 .finish-footer {
@@ -1386,21 +1122,8 @@ button {
     font-size: 28px;
   }
 
-  .speech-list .character-message:nth-child(2) {
-    display: none;
-  }
-
-  .route-place strong {
-    font-size: 15px;
-  }
-
   .display-question {
     font-size: 18px;
-  }
-
-  .recovered-words li {
-    font-size: 14px;
-    padding: 10px 6px;
   }
 }
 
@@ -1420,41 +1143,26 @@ button {
     height: clamp(96px, 26vw, 118px);
   }
 
-  .speech-list {
-    gap: 6px;
-    margin-bottom: 12px;
-  }
-
-  .character-message {
-    padding: 9px 11px;
-    font-size: 14px;
-  }
-
   .guide-character {
-    width: 70px;
-    height: 78px;
+    width: 52px;
+    height: 52px;
   }
 
   .guide-bubble {
-    font-size: 13px;
-    padding: 10px;
+    font-size: 16px;
+    padding: 9px 11px;
   }
 
-  .mission-image {
-    max-height: min(28vh, 200px);
-  }
-
-  .mission-title {
-    font-size: 20px;
+  :root {
+    --clue-img-h: min(28vh, 200px);
   }
 
   .display-question {
-    font-size: 18px;
+    font-size: 17px;
     padding: 8px 10px;
     margin-bottom: 6px;
   }
 
-  .mission-guide,
   .mission-clue {
     font-size: 14px;
   }
@@ -1491,17 +1199,8 @@ button {
 }
 
 @media (max-height: 640px) {
-  .start-screen .speech-list .character-message:nth-child(3) {
-    display: none;
-  }
-
-  .route-outro-character {
-    width: 56px;
-    height: 62px;
-  }
-
-  .mission-image {
-    max-height: min(22vh, 150px);
+  :root {
+    --clue-img-h: min(22vh, 150px);
   }
 
   .tile-button {
@@ -1542,8 +1241,8 @@ button {
     height: 88px;
   }
 
-  .mission-image {
-    max-height: 120px;
+  :root {
+    --clue-img-h: 120px;
   }
 
   .finish-hero-wrap {
