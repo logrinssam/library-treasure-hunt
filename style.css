@@ -970,7 +970,7 @@ body.modal-open {
   font-size: 19px;
 }
 
-/* 설문 버튼 바로 아래: 스탬프 받는 장소 안내 */
+/* 설문 버튼 바로 아래: 도장 받는 장소 안내 */
 .survey-note {
   margin: 0 0 6px;
   color: var(--ink);

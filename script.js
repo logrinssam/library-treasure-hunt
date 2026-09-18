@@ -23,7 +23,7 @@ const GAME_CONFIG = {
   title: "부기의 사라진 낱말을 찾아라!",
   subtitle: "부산도서관 탐험책 완성 대작전",
 
-  // 완료 화면의 "설문조사하고 스탬프 받기" 버튼이 여는 주소.
+  // 완료 화면의 "설문조사하고 도장 받기" 버튼이 여는 주소.
   // 비워 두면 버튼이 "설문조사 주소를 준비 중입니다" 안내만 띄운다.
   surveyUrl: "https://forms.gle/NCV1EUjWNQPhLiMd6",
 
