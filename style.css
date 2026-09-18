@@ -966,8 +966,22 @@ body.modal-open {
 
 .survey-button {
   margin-top: 0;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   font-size: 19px;
+}
+
+/* 설문 버튼 바로 아래: 도장 받는 장소 안내 */
+.survey-note {
+  margin: 0 0 6px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+.survey-note strong {
+  color: var(--green);
 }
 
 .finish-footer {
